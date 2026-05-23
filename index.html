@@ -1990,7 +1990,7 @@ function piirraKehityskaavio(merkinnat) {
   const pisteet = data.map((m, i) => {
     const x = padL + (i / (data.length - 1)) * plotW;
     const arvo = zoneArvo(m);
-    const y = padT + plotH - ((arvo - 1) / 4) * plotH;
+    const y = padT + ((arvo - 1) / 4) * plotH;
     return { x, y, m, arvo };
   });
 
