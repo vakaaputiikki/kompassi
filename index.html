@@ -57,8 +57,10 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .oire-btn{padding:7px 10px;border:1px solid #eee;border-radius:8px;background:#fafafa;cursor:pointer;font-size:12px;color:#666;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.12s;display:flex;align-items:center;gap:7px}
 .oire-btn:hover{border-color:#ccc;color:#1a1a1a;background:#fff}
 .oire-btn.val{border-color:#639922;background:#f0f7e6;color:#3B6D11}
-.oire-btn.val.yli{border-color:#D85A30;background:#fdf0eb;color:#712B13}
-.oire-btn.val.ali{border-color:#378ADD;background:#eaf3fb;color:#0C447C}
+.oire-btn.val.yli{border-color:#C0244A;background:#fde8ee;color:#712B13}
+.oire-btn.val.kohonnut{border-color:#EF9F27;background:#fdf3e3;color:#633806}
+.oire-btn.val.las{border-color:#378ADD;background:#e3eef9;color:#185FA5}
+.oire-btn.val.ali{border-color:#7F77DD;background:#eeedfe;color:#3C3489}
 .step-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
 .step-num{width:22px;height:22px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888}
 .step-title{font-size:14px;font-weight:500;color:#1a1a1a}
@@ -83,7 +85,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .hahmo-wrap.zone-yli .hahmo-overlay{background:radial-gradient(ellipse at 50% 30%, rgba(216,90,48,0.15) 0%, transparent 65%);opacity:1}
 .hahmo-wrap.zone-kohonnut .hahmo-overlay{background:radial-gradient(ellipse at 50% 30%, rgba(239,159,39,0.13) 0%, transparent 65%);opacity:1}
 .hahmo-wrap.zone-las .hahmo-overlay{background:radial-gradient(ellipse at 50% 50%, rgba(55,138,221,0.12) 0%, transparent 70%);opacity:1}
-.hahmo-wrap.zone-ali .hahmo-overlay{background:radial-gradient(ellipse at 50% 60%, rgba(127,119,221,0.14) 0%, transparent 70%);opacity:1}
+.hahmo-wrap.zone-ali .hahmo-overlay{background:radial-gradient(ellipse at 50% 60%, rgba(127,119,221,0.18) 0%, transparent 70%);opacity:1}
 
 /* Keho-pisteet SVG-kerros kuvan päällä */
 .hahmo-dots{position:absolute;inset:0;z-index:4;pointer-events:none}
@@ -95,7 +97,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .jseg-koh{left:20%;width:15%;background:#FDF3E3}
 .jseg-ok{left:35%;width:30%;background:#E8F5E9}
 .jseg-las{left:65%;width:15%;background:#E3EEF9}
-.jseg-ali{left:80%;width:20%;background:#D6E8F7;border-radius:0 24px 24px 0}
+.jseg-ali{left:80%;width:20%;background:#EEEDFE;border-radius:0 24px 24px 0}
 .jborder{position:absolute;inset:0;border-radius:24px;border:1px solid #e8e8e8;pointer-events:none}
 .jdiv{position:absolute;top:10px;bottom:10px;width:1px;background:#e0e0e0}
 .jhandle{position:absolute;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid #3B6D11;transform:translate(-50%,-50%);cursor:grab;z-index:3;transition:border-color 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
@@ -105,7 +107,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .b-yli{background:#FAECE7;color:#712B13}
 .b-koh{background:#FAEEDA;color:#633806}
 .b-ok{background:#EAF3DE;color:#27500A}
-.b-las{background:#E6F1FB;color:#0C447C}
+.b-las{background:#E6F1FB;color:#185FA5}
 .b-ali{background:#EEEDFE;color:#3C3489}
 textarea{width:100%;min-height:75px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none}
 textarea:focus{border-color:#bbb;background:#fff}
@@ -130,7 +132,7 @@ textarea:focus{border-color:#bbb;background:#fff}
 .aanite-tab{padding:7px 16px;border:1px solid #eee;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;color:#888;font-family:'DM Sans',sans-serif;transition:all 0.12s;font-weight:500}
 .aanite-tab-yli.active{background:#FAECE7;color:#712B13;border-color:#FAECE7}
 .aanite-tab-ok.active{background:#EAF3DE;color:#27500A;border-color:#EAF3DE}
-.aanite-tab-ali.active{background:#EEEDFE;color:#3C3489;border-color:#EEEDFE}
+.aanite-tab-ali.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
 .aanite-zone-title{font-size:12px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:1rem}
 .aanite-card{border:1px solid #eee;border-radius:10px;padding:1rem;margin-bottom:0.75rem;background:#fafafa}
 .aanite-name{font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px}
@@ -982,34 +984,52 @@ textarea:focus{border-color:#bbb;background:#fff}
 <script>
 const OIREET={
   keho:[
-    {t:'Sydän hakkaa / syke nousee',z:'yli'},{t:'Lihakset jännittyy',z:'yli'},
-    {t:'Kehon säryt lisääntyvät',z:'yli'},{t:'Hengitys raskasta',z:'yli'},
-    {t:'Kädet hikoavat',z:'yli'},{t:'Vatsaa kiristää',z:'yli'},
-    {t:'Aistit herkillä',z:'yli'},{t:'Unettomuus',z:'yli'},
-    {t:'Olo raskas tai väsynyt',z:'ali'},{t:'Liike vaivalloista',z:'ali'},
-    {t:'Kädet tai jalat raskaat',z:'ali'},{t:'Voimakas väsymys',z:'ali'},
-    {t:'Turtuneisuus',z:'ali'},{t:'Keho tuntuu etäiseltä',z:'jah'},
-    {t:'Puutumisen tunne',z:'jah'},{t:'Keho rauhallinen',z:'ok'},
-    {t:'Kehon toiminnot tasapainossa',z:'ok'}
+    {t:'Sydän hakkaa / syke nousee',z:'yli'},
+    {t:'Lihasjännitys',z:'yli'},
+    {t:'Hengitys tiukkaa',z:'yli'},
+    {t:'Kädet hikoavat',z:'yli'},
+    {t:'Vatsa kiristää',z:'yli'},
+    {t:'Unettomuus',z:'yli'},
+    {t:'Kehon säryt lisääntyvät',z:'kohonnut'},
+    {t:'Aistit herkillä',z:'kohonnut'},
+    {t:'Keho rauhallinen',z:'ok'},
+    {t:'Kehon toiminnot tasapainossa',z:'ok'},
+    {t:'Kädet tai jalat raskaat',z:'las'},
+    {t:'Liike vaivalloista',z:'las'},
+    {t:'Keho tuntuu etäiseltä',z:'las'},
+    {t:'Puutumisen tunne',z:'ali'},
+    {t:'Turtuneisuus',z:'ali'},
+    {t:'Voimakas väsymys',z:'ali'},
+    {t:'Olo painava ja väsynyt',z:'ali'}
   ],
   mieli:[
-    {t:'Ajatukset kiitävät',z:'yli'},{t:'Keskittyminen vaikeaa',z:'yli'},
-    {t:'Stressi tai ahdistus',z:'yli'},{t:'Epäluuloisuus lisääntyy',z:'yli'},
-    {t:'Jatkuva kiireen tunne',z:'yli'},{t:'Paniikki',z:'yli'},
-    {t:'Päätöksien tekeminen vaikeaa',z:'yli'},{t:'Ärtyneisyys',z:'kohonnut'},
-    {t:'Levoton olo',z:'kohonnut'},{t:'Tyhjyyden tunne',z:'ali'},
-    {t:'Ei motivaatiota',z:'ali'},{t:'Toivottomuus',z:'ali'},
-    {t:'Häpeä',z:'ali'},{t:'Masennuksen kaltaiset oireet',z:'ali'},
-    {t:'Mieli poissaoleva',z:'jah'},{t:'Dissosiaatio',z:'jah'},
-    {t:'Autopilotilla eteneminen',z:'jah'},{t:'Mieli selkeä ja rauhallinen',z:'ok'},
-    {t:'Läsnä olevampi',z:'ok'}
+    {t:'Stressi tai ahdistus',z:'yli'},
+    {t:'Ajatukset kiitävät',z:'yli'},
+    {t:'Paniikki',z:'yli'},
+    {t:'Ärtyneisyys',z:'kohonnut'},
+    {t:'Levoton olo',z:'kohonnut'},
+    {t:'Mieli selkeä ja rauhallinen',z:'ok'},
+    {t:'Läsnäolevampi',z:'ok'},
+    {t:'Ei motivaatiota',z:'las'},
+    {t:'Mieli poissaoleva',z:'las'},
+    {t:'Reagointi hidastuu',z:'las'},
+    {t:'Tyhjyyden tunne',z:'ali'},
+    {t:'Toivottomuus',z:'ali'},
+    {t:'Häpeä',z:'ali'},
+    {t:'Masennuksen kaltaiset oireet',z:'ali'},
+    {t:'Dissosiaatio',z:'ali'},
+    {t:'Autopilotilla eteneminen',z:'ali'}
   ],
   kayt:[
-    {t:'Puhuminen nopeutunut',z:'yli'},{t:'Välttely tai pakeneminen',z:'yli'},
-    {t:'Vaikea pysähtyä',z:'yli'},{t:'Ylisuorittaminen / turbovaihe',z:'kohonnut'},
-    {t:'Kehon tarpeiden ohittaminen',z:'kohonnut'},{t:'Tekeminen pysähtyy',z:'ali'},
-    {t:'Eristäytyminen',z:'ali'},{t:'Reagointi hidastuu',z:'jah'},
-    {t:'Toiminta sujuu luontevasti',z:'ok'},{t:'Kyky asettaa omia rajoja',z:'ok'}
+    {t:'Välttely tai pakeneminen',z:'yli'},
+    {t:'Ylisuorittaminen / turbovaihe',z:'yli'},
+    {t:'Puhuminen nopeutunut',z:'kohonnut'},
+    {t:'Vaikea pysähtyä',z:'kohonnut'},
+    {t:'Kehon tarpeiden ohittaminen',z:'kohonnut'},
+    {t:'Toiminta sujuu luontevasti',z:'ok'},
+    {t:'Kyky asettaa omia rajoja',z:'ok'},
+    {t:'Tekeminen pysähtyy',z:'ali'},
+    {t:'Eristäytyminen',z:'ali'}
   ]
 };
 
@@ -1076,7 +1096,7 @@ const KEH={
     {n:'Katseen suuntaaminen ylös',d:'Nosta katse kattoon tai horisonttiin 30 s.'},
     {n:'Seisomaan ja liikkeelle',d:'Nouse seisomaan. Kävele nopeasti 2 min.'}
   ],
-  jah:[
+  ali:[
     {n:'Hidas ravistelu jaloista',d:'Aloita varpaisiin, liiku hitaasti ylös.'},
     {n:'Lämpö käsiin',d:'Hiero käsiä tai pidä lämmintä mukia kädessä.'},
     {n:'Äänellinen uloshengitys',d:'Hengitä ulos ääneen — hhhh tai mmmm.'},
@@ -1120,11 +1140,11 @@ const PILARIT={
     {n:'Uni',tip:'Onko kyseessä väsymys vai hermoston alivireisyys?',miksi:'Lyhyt 20 min lepo voi palauttaa — pidempi voi syventää alivireisyyttä.'},
     {n:'Sosiaalinen kontakti',tip:'Toisen ihmisen läsnäolo aktivoi hermostoa.',miksi:'Yksin oleminen alivireisessä tilassa voi vahvistaa sitä.'}
   ],
-  jah:[
-    {n:'Turvallinen ympäristö',tip:'Lamaantuminen on hermoston suojareaktio — ei heikkous.',miksi:'Jähmettyminen syntyy kun hermosto arvioi tilanteen uhkaavaksi. Turvallisuuden kokemus on ensisijainen.'},
-    {n:'Sosiaalinen kontakti',tip:'Turvallinen toinen ihminen vapauttaa jähmettymisestä.',miksi:'Polyvagaalisen teorian mukaan turvallinen ihmiskontakti on nopein tie ulos lamaantumisesta.'},
+  ali:[
+    {n:'Turvallinen ympäristö',tip:'Alivireystila on hermoston suojareaktio — ei heikkous.',miksi:'Lamaantuminen syntyy kun hermosto arvioi tilanteen uhkaavaksi. Turvallisuuden kokemus on ensisijainen.'},
+    {n:'Sosiaalinen kontakti',tip:'Turvallinen toinen ihminen auttaa vapautumaan alivireystilasta.',miksi:'Polyvagaalisen teorian mukaan turvallinen ihmiskontakti on nopein tie ulos lamaantumisesta.'},
     {n:'Lämpö',tip:'Lämmin juoma, suihku tai peitto.',miksi:'Lämpö aktivoi kehon turvajärjestelmää.'},
-    {n:'Uni ja lepo',tip:'Lamaantuminen kuluttaa energiaa.',miksi:'Jähmettymistila on biologisesti energiaintensiivinen. Keho tarvitsee lepoa.'}
+    {n:'Uni ja lepo',tip:'Alivireystila kuluttaa energiaa.',miksi:'Alivireistila on biologisesti energiaintensiivinen. Keho tarvitsee lepoa.'}
   ]
 };
 
@@ -1149,10 +1169,10 @@ const YLLAPITO={
     {n:'Passiivinen vetäytyminen vs. palauttava lepo',d:'Passiivinen vetäytyminen voi syventää alivireisyyttä. Palauttava lepo tehdään tietoisesti.'},
     {n:'Oma toimijuus',d:'Pienikin tietoinen teko on todiste siitä, että pystyt vaikuttamaan omaan tilaasi.'}
   ],
-  jah:[
-    {n:'Jähmettymisen ennakoivat merkit',d:'Mitkä tilanteet edeltävät lamaantumista? Tietoisuus auttaa suunnittelemaan turvarakenteita etukäteen.'},
+  ali:[
+    {n:'Alivireystilan ennakoivat merkit',d:'Mitkä tilanteet edeltävät lamaantumista? Tietoisuus auttaa suunnittelemaan turvarakenteita etukäteen.'},
     {n:'Hermostoa tukeva arki',d:'Säännöllisyys, ennustettavuus ja turvalliset ihmissuhteet ovat parhaita ennaltaehkäiseviä tekijöitä.'},
-    {n:'Oma toimijuus',d:'Jähmettymistilassa toimijuus tuntuu kaukaiselta. Siksi sitä rakennetaan ennen kriisiä.'}
+    {n:'Oma toimijuus',d:'Alivireystilassa toimijuus tuntuu kaukaiselta. Siksi sitä rakennetaan ennen kriisiä.'}
   ]
 };
 
@@ -1169,9 +1189,9 @@ const ZD={
   las:{id:'las',title:'Laskenut vireystila',sub:'Hermosto alkaa hidastua. Keho pyytää lepoa tai aktivointia.',handle:'#185FA5',bc:'b-las',zclass:'zone-las',
     oireet:[{dot:'#378ADD',txt:'Sydän lyö hitaammin'},{dot:'#378ADD',txt:'Hengitys hidastuu'},{dot:'#378ADD',txt:'Liikkeet tuntuvat raskaammilta'},{dot:'#378ADD',txt:'Ajatukset hidastuvat'},{dot:'#85B7EB',txt:'Jalat ja kädet painavat'}],
     pts:{sydan:{op:0},hengitys:{op:0.4,slow:true},niska:{op:0},vatsa:{op:0},kadet:{op:0.3},paa:{op:0},rento:{op:0.3},jalat:{op:0.6,slow:true}},hkey:'ali'},
-  ali:{id:'ali',title:'Alivireystila',sub:'Jähmety — vagushermon selän puoleinen haara aktivoitunut. Lamaannus.',handle:'#0C447C',bc:'b-ali',zclass:'zone-ali',
-    oireet:[{dot:'#85B7EB',txt:'Sydän lyö hitaasti, keho painava'},{dot:'#85B7EB',txt:'Hengitys pinnallista ja hidasta'},{dot:'#7F77DD',txt:'Dissosiaatio tai mieli poissaoleva'},{dot:'#7F77DD',txt:'Häpeä, toivottomuus tai tyhjyys'},{dot:'#85B7EB',txt:'Autopilotilla eteneminen'}],
-    pts:{sydan:{op:0},hengitys:{op:0.5,slow:true},niska:{op:0},vatsa:{op:0},kadet:{op:0.5},paa:{op:0.4,slow:true},rento:{op:0},jalat:{op:1,slow:true}},hkey:'jah'}
+  ali:{id:'ali',title:'Alivireystila',sub:'Jähmety — vagushermon selän puoleinen haara aktivoitunut. Lamaannus.',handle:'#3C3489',bc:'b-ali',zclass:'zone-ali',
+    oireet:[{dot:'#7F77DD',txt:'Sydän lyö hitaasti, keho painava'},{dot:'#7F77DD',txt:'Hengitys pinnallista ja hidasta'},{dot:'#7F77DD',txt:'Dissosiaatio tai mieli poissaoleva'},{dot:'#7F77DD',txt:'Häpeä, toivottomuus tai tyhjyys'},{dot:'#7F77DD',txt:'Autopilotilla eteneminen'}],
+    pts:{sydan:{op:0},hengitys:{op:0.5,slow:true},niska:{op:0},vatsa:{op:0},kadet:{op:0.5},paa:{op:0.4,slow:true},rento:{op:0},jalat:{op:1,slow:true}},hkey:'ali'}
 };
 
 const ptMap={sydan:['p-sydan'],hengitys:['p-hengitys'],niska:['p-niska','p-niska-v','p-niska-o'],vatsa:['p-vatsa'],kadet:['p-kasi-v','p-kasi-o'],paa:['p-paa'],rento:['p-rento-a','p-rento-b','p-rento-c'],jalat:['p-jalka-v','p-jalka-o']};
@@ -1210,7 +1230,26 @@ function showScreen(id,btn){
   document.getElementById('screen-'+id).classList.add('visible');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(id==='harjoitteet')renderHarjoitteet();
+  if(id==='harjoitteet'){
+    // Päivitä aktiivZone viimeisimmästä kirjauksesta
+    try{
+      const tallennetut=JSON.parse(localStorage.getItem('vk1')||'[]');
+      if(tallennetut.length>0){
+        aktiivZone=tallennetut[0].zone||getZone(tallennetut[0].janaArvo||50);
+      }
+    }catch(e){}
+    // Jos käyttäjä on valinnut oireita mutta ei tallentanut, käytä paivitaEhdotus-laskentaa
+    if(valiturOireet.length>0){
+      const scores={yli:0,kohonnut:0,ok:0,las:0,ali:0};
+      valiturOireet.forEach(t=>{
+        const o=[...OIREET.keho,...OIREET.mieli,...OIREET.kayt].find(x=>x.t===t);
+        if(o)scores[o.z]=(scores[o.z]||0)+1;
+      });
+      const max=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
+      if(max&&max[1]>0)aktiivZone=max[0];
+    }
+    renderHarjoitteet();
+  }
   if(id==='polku')renderPolku();
   if(id==='ohje')setTimeout(paivitaMuistutusTila, 50);
   if(id==='sos')alustaSos();
@@ -1221,7 +1260,8 @@ function renderOireet(){
     const el=document.getElementById('og-'+kat);
     el.innerHTML=OIREET[kat].map(o=>{
       const sel=valiturOireet.includes(o.t);
-      const cls=sel?'oire-btn val '+(o.z==='yli'?'yli':o.z==='ali'||o.z==='jah'?'ali':''):'oire-btn';
+      const zluokka={yli:'yli',kohonnut:'kohonnut',ok:'',las:'las',ali:'ali'}[o.z]||'';
+      const cls=sel?'oire-btn val '+(zluokka):'oire-btn';
       const safe=o.t.replace(/'/g,'&apos;');
       return`<button class="${cls}" onclick="toggleOire('${safe}','${o.z}')">${sel?'&#10003;':'+'}  ${o.t}</button>`;
     }).join('');
@@ -1235,15 +1275,14 @@ function toggleOire(t,z){
 }
 
 function paivitaEhdotus(){
-  const scores={yli:0,kohonnut:0,ok:0,ali:0,jah:0};
+  const scores={yli:0,kohonnut:0,ok:0,las:0,ali:0};
   valiturOireet.forEach(t=>{
     const o=[...OIREET.keho,...OIREET.mieli,...OIREET.kayt].find(x=>x.t===t);
     if(o)scores[o.z]=(scores[o.z]||0)+1;
   });
   const max=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
   if(max&&max[1]>0){
-    const zm={yli:'yli',kohonnut:'kohonnut',ok:'ok',ali:'las',jah:'ali'};
-    const zid=zm[max[0]]||'ok';
+    const zid=max[0]||'ok';
     aktiivZone=zid;
     const z=ZD[zid];
     document.getElementById('ehdotus-wrap').innerHTML=`<span class="ehdotus-badge ${z.bc}">&#10024; Ehdotus: ${z.title}</span>`;
