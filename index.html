@@ -195,9 +195,76 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn" onclick="showScreen('digivalmennus',this)">Digivalmennus</button>
   </div>
 
-  <!-- Kiinteä SOS-nappi -->
-  <div id="sos-kiintea" style="position:fixed;bottom:24px;right:16px;z-index:998">
-    <button onclick="avaaSOSModaali()" style="width:56px;height:56px;border-radius:50%;background:#E24B4A;border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 16px rgba(226,75,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.15s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🆘</button>
+  <!-- Kiinteät napit -->
+  <div style="position:fixed;bottom:24px;right:16px;z-index:998;display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+    <button onclick="avaaEtaisyysModaali()" style="padding:10px 16px;border-radius:24px;background:#1a1a1a;border:none;cursor:pointer;font-size:13px;font-weight:500;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.2);font-family:'DM Sans',sans-serif;transition:transform 0.15s;white-space:nowrap" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">Ota etäisyyttä</button>
+    <button onclick="avaaSOSModaali()" style="width:48px;height:48px;border-radius:50%;background:#E24B4A;border:none;cursor:pointer;font-size:20px;box-shadow:0 4px 16px rgba(226,75,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.15s" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">🆘</button>
+  </div>
+
+  <!-- Ota etäisyyttä -modaali -->
+  <div id="etaisyys-modaali" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;align-items:flex-end;justify-content:center">
+    <div id="etaisyys-sisalto" style="background:#fff;border-radius:20px 20px 0 0;padding:1.5rem 1rem 2.5rem;width:100%;max-width:680px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:92vh;overflow-y:auto">
+      <div style="width:40px;height:4px;background:#eee;border-radius:2px;margin:0 auto 1.5rem"></div>
+      <div id="etaisyys-vaihe-1" style="display:block">
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <div style="font-size:13px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Olet nyt tässä</div>
+          <div style="font-size:22px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Keho reagoi.<br>Se on normaalia.</div>
+          <div style="font-size:13px;color:#888;line-height:1.6">Sinun ei tarvitse tehdä mitään suurta.<br>Vain yksi askel kerrallaan.</div>
+        </div>
+        <!-- Hengitysanimaatio -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem">
+          <div id="hengitys-ympyra" style="width:100px;height:100px;border-radius:50%;background:#EAF3DE;border:3px solid #639922;display:flex;align-items:center;justify-content:center;transition:transform 4s ease-in-out,background 4s ease-in-out;margin-bottom:0.75rem">
+            <div id="hengitys-teksti" style="font-size:13px;font-weight:500;color:#3B6D11;text-align:center">Hengitä<br>sisään</div>
+          </div>
+          <div id="hengitys-ohje" style="font-size:12px;color:#888">Seuraa ympyrää silmilläsi</div>
+        </div>
+        <button onclick="siirryEtaisyysVaihe(2)" class="btn primary" style="width:100%">Olen hengittänyt → Jatka</button>
+        <button onclick="suljeEtaisyysModaali()" style="width:100%;margin-top:8px;border:none;background:none;font-size:13px;color:#ccc;cursor:pointer;padding:8px;font-family:'DM Sans',sans-serif">Sulje</button>
+      </div>
+
+      <div id="etaisyys-vaihe-2" style="display:none">
+        <div style="text-align:center;margin-bottom:1.25rem">
+          <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Vaihe 2 / 3</div>
+          <div style="font-size:19px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Mitä kehossa<br>tuntuu juuri nyt?</div>
+          <div style="font-size:12px;color:#888">Nimeä vain – älä analysoi</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;justify-content:center">
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Sydän hakkaa</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Hengitys tiukkaa</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Lihasjännitys</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Kädet vapisevat</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Vatsa kiristää</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Pää pyörii</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Keho jähmettynyt</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Energia laskee</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Olo etäinen</button>
+          <button onclick="valitseEtaisyysTuntemus(this)" style="padding:7px 14px;border:1px solid #eee;border-radius:20px;background:#fafafa;font-size:12px;color:#666;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s">Helpottaa</button>
+        </div>
+        <button onclick="siirryEtaisyysVaihe(3)" class="btn primary" style="width:100%">Jatka →</button>
+        <button onclick="siirryEtaisyysVaihe(1)" style="width:100%;margin-top:8px;border:none;background:none;font-size:13px;color:#ccc;cursor:pointer;padding:8px;font-family:'DM Sans',sans-serif">← Takaisin</button>
+      </div>
+
+      <div id="etaisyys-vaihe-3" style="display:none">
+        <div style="text-align:center;margin-bottom:1.25rem">
+          <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Vaihe 3 / 3</div>
+          <div style="font-size:19px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Yksi pieni teko<br>juuri nyt</div>
+        </div>
+        <div id="etaisyys-harjoite-lista" style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem"></div>
+        <button onclick="siirryEtaisyysVaihe(2)" style="width:100%;margin-top:4px;border:none;background:none;font-size:13px;color:#ccc;cursor:pointer;padding:8px;font-family:'DM Sans',sans-serif">← Takaisin</button>
+      </div>
+
+      <div id="etaisyys-vaihe-4" style="display:none;text-align:center">
+        <div style="font-size:36px;margin-bottom:1rem">🌱</div>
+        <div style="font-size:19px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Hyvä.</div>
+        <div style="font-size:13px;color:#888;line-height:1.6;margin-bottom:1.5rem">Otit etäisyyttä. Se vaati rohkeutta.<br>Miltä nyt tuntuu?</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:1.5rem">
+          <button onclick="tallennaEtaisyysJaTule('parempi')" style="padding:10px 20px;border-radius:20px;background:#EAF3DE;border:1px solid #C0DD97;font-size:13px;color:#3B6D11;cursor:pointer;font-family:'DM Sans',sans-serif">Parempi 🌿</button>
+          <button onclick="tallennaEtaisyysJaTule('sama')" style="padding:10px 20px;border-radius:20px;background:#f5f5f5;border:1px solid #eee;font-size:13px;color:#888;cursor:pointer;font-family:'DM Sans',sans-serif">Sama olo</button>
+          <button onclick="tallennaEtaisyysJaTule('vaikea')" style="padding:10px 20px;border-radius:20px;background:#FDE8EE;border:1px solid #f5c0c0;font-size:13px;color:#712B13;cursor:pointer;font-family:'DM Sans',sans-serif">Vaikea vielä</button>
+        </div>
+        <div id="etaisyys-loppu-viesti" style="font-size:12px;color:#aaa;line-height:1.6"></div>
+      </div>
+    </div>
   </div>
 
   <!-- SOS Modaali -->
@@ -1848,6 +1915,137 @@ function piirraKehityskaavio(merkinnat) {
   svg += `<div style="font-size:10px;color:#ccc;text-align:center;margin-top:2px">Viimeiset ${data.length} merkintää</div>`;
 
   div.innerHTML = svg;
+}
+
+// OTA ETÄISYYTTÄ
+let hengitysIntervaali = null;
+let etaisyysValitutTuntemukset = [];
+let etaisyysValittuHarjoite = null;
+
+const etaisyysHarjoitteet = [
+  { nimi:'Pitkä uloshengitys', ohje:'Hengitä sisään 4 sekuntia, ulos 8 sekuntia. Toista 3 kertaa.', zid:['yli','kohonnut'] },
+  { nimi:'Maadoitus – 5 asiaa', ohje:'Nimeä ääneen tai mielessä 5 asiaa joita näet ympärilläsi.', zid:['yli','kohonnut','las','ali'] },
+  { nimi:'Kädet sydämelle', ohje:'Laita molemmat kädet sydämelle. Tunnista sydämen lyönti. Pysy siinä 30 sekuntia.', zid:['yli','kohonnut'] },
+  { nimi:'Jalat lattiaan', ohje:'Paina jalkapohjat lattiaan. Tunnista lattian kovuus. Hengitä hitaasti.', zid:['yli','kohonnut','las','ali'] },
+  { nimi:'Kylmä vesi kasvoille', ohje:'Käy kastelemassa kasvosi kylmällä vedellä. Se aktivoi vagushermon.', zid:['yli'] },
+  { nimi:'Hidas liike', ohje:'Liiku hitaasti – käänny hitaasti, nosta käsi hitaasti. Hidastat hermostoa.', zid:['yli','kohonnut'] },
+  { nimi:'Aktivoi keho', ohje:'Nouse ylös, ravistele käsiä ja jalkoja 30 sekuntia. Herättele hermostoa.', zid:['las','ali'] },
+  { nimi:'Laula tai hyräile', ohje:'Hyräile mitä tahansa hiljaa itseksesi. Äänihuulet aktivoivat vagushermon.', zid:['las','ali'] },
+];
+
+function avaaEtaisyysModaali() {
+  etaisyysValitutTuntemukset = [];
+  etaisyysValittuHarjoite = null;
+  const modaali = document.getElementById('etaisyys-modaali');
+  const sisalto = document.getElementById('etaisyys-sisalto');
+  modaali.style.display = 'flex';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    sisalto.style.transform = 'translateY(0)';
+  }));
+  siirryEtaisyysVaihe(1);
+  kaynnistäHengitys();
+}
+
+function suljeEtaisyysModaali() {
+  const modaali = document.getElementById('etaisyys-modaali');
+  const sisalto = document.getElementById('etaisyys-sisalto');
+  sisalto.style.transform = 'translateY(100%)';
+  pysaytaHengitys();
+  setTimeout(() => modaali.style.display = 'none', 300);
+}
+
+function siirryEtaisyysVaihe(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('etaisyys-vaihe-' + i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+  });
+  if (n === 1) kaynnistäHengitys();
+  else pysaytaHengitys();
+  if (n === 3) renderEtaisyysHarjoitteet();
+}
+
+function kaynnistäHengitys() {
+  pysaytaHengitys();
+  const ympyra = document.getElementById('hengitys-ympyra');
+  const teksti = document.getElementById('hengitys-teksti');
+  const ohje = document.getElementById('hengitys-ohje');
+  if (!ympyra) return;
+  let sisaan = true;
+  function vaihda() {
+    if (sisaan) {
+      ympyra.style.transform = 'scale(1.4)';
+      ympyra.style.background = '#C0DD97';
+      if (teksti) teksti.textContent = 'Hengitä\nsisään';
+      if (ohje) ohje.textContent = '4 sekuntia...';
+    } else {
+      ympyra.style.transform = 'scale(1)';
+      ympyra.style.background = '#EAF3DE';
+      if (teksti) teksti.textContent = 'Hengitä\nulos';
+      if (ohje) ohje.textContent = '8 sekuntia...';
+    }
+    sisaan = !sisaan;
+  }
+  vaihda();
+  hengitysIntervaali = setInterval(vaihda, 4000);
+}
+
+function pysaytaHengitys() {
+  if (hengitysIntervaali) { clearInterval(hengitysIntervaali); hengitysIntervaali = null; }
+}
+
+function valitseEtaisyysTuntemus(btn) {
+  btn.style.background = btn.style.background === 'rgb(26, 26, 26)' ? '#fafafa' : '#1a1a1a';
+  btn.style.color = btn.style.color === 'rgb(255, 255, 255)' ? '#666' : '#fff';
+  btn.style.borderColor = btn.style.borderColor === 'rgb(26, 26, 26)' ? '#eee' : '#1a1a1a';
+}
+
+function renderEtaisyysHarjoitteet() {
+  const lista = document.getElementById('etaisyys-harjoite-lista');
+  if (!lista) return;
+  // Näytä 3 sopivaa harjoitetta
+  const sopivat = etaisyysHarjoitteet.slice(0, 4);
+  lista.innerHTML = sopivat.map((h, i) => `
+    <div id="etaisyys-h-${i}" onclick="valitseEtaisyysHarjoite(${i})" style="padding:12px;border:1.5px solid #eee;border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fafafa">
+      <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:4px">${h.nimi}</div>
+      <div style="font-size:12px;color:#888;line-height:1.5">${h.ohje}</div>
+    </div>`).join('') +
+    `<button onclick="siirryEtaisyysVaihe(4)" class="btn primary" style="width:100%;margin-top:4px" id="etaisyys-jatka-btn">Tein harjoitteen → Jatka</button>`;
+}
+
+function valitseEtaisyysHarjoite(i) {
+  document.querySelectorAll('[id^="etaisyys-h-"]').forEach(el => {
+    el.style.borderColor = '#eee';
+    el.style.background = '#fafafa';
+  });
+  const valittu = document.getElementById('etaisyys-h-' + i);
+  if (valittu) {
+    valittu.style.borderColor = '#639922';
+    valittu.style.background = '#EAF3DE';
+  }
+  etaisyysValittuHarjoite = etaisyysHarjoitteet[i];
+}
+
+function tallennaEtaisyysJaTule(tulos) {
+  // Tallenna harjoitus polkuun
+  if (etaisyysValittuHarjoite) {
+    try {
+      const lista = JSON.parse(localStorage.getItem('vk_harj') || '[]');
+      lista.unshift({
+        aika: new Date().toISOString(),
+        nimi: 'Ota etäisyyttä – ' + etaisyysValittuHarjoite.nimi,
+        ennen: 30, jalkeen: tulos === 'parempi' ? 50 : tulos === 'sama' ? 30 : 25
+      });
+      localStorage.setItem('vk_harj', JSON.stringify(lista));
+    } catch(e) {}
+  }
+  const viestit = {
+    parempi: 'Hienoa. Hermostosi osaa säädellä – sinä olet se joka ohjaa.',
+    sama: 'Olo pysyi samana – se on ok. Joskus riittää että pysähdyt.',
+    vaikea: 'Vaikeat hetket menevät ohi. Hae tarvittaessa lisää tukea.'
+  };
+  const el = document.getElementById('etaisyys-loppu-viesti');
+  if (el) el.textContent = viestit[tulos] || '';
+  setTimeout(suljeEtaisyysModaali, 3500);
 }
 
 // SOS MODAALI
