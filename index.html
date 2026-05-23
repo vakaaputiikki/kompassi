@@ -571,6 +571,12 @@ textarea:focus{border-color:#bbb;background:#fff}
   <!-- POLKU -->
   <div id="screen-polku" class="screen">
 
+    <!-- Kehityskaavio -->
+    <div id="polku-kaavio-kortti" class="card" style="display:none;margin-bottom:1rem">
+      <div class="slabel" style="margin-bottom:0.75rem">Vireystila ajan myötä</div>
+      <div id="polku-kaavio"></div>
+    </div>
+
     <!-- Reflektio -->
     <div id="polku-reflektio" class="card" style="display:none;margin-bottom:1rem">
       <div class="slabel" style="margin-bottom:0.75rem">Viikkoheijastus</div>
@@ -1514,6 +1520,8 @@ function renderPolku() {
 
   // VIIKKOHEIJASTUS
   laskeReflektio(merkinnat, harjoitukset, aaniteHistoria);
+  // KEHITYSKAAVIO
+  piirraKehityskaavio(merkinnat);
 
   // Kerää kaikki teot, vanhimmasta uusimpaan
   const teot = [];
@@ -1742,6 +1750,104 @@ function laskeReflektio(merkinnat, harjoitukset, aanitteet) {
     </div>` : ''}
     <div style="font-size:11px;color:#aaa;line-height:1.5">Heijastus perustuu viimeisten 7 päivän merkintöihin.</div>
   `;
+}
+
+function piirraKehityskaavio(merkinnat) {
+  const kortti = document.getElementById('polku-kaavio-kortti');
+  const div = document.getElementById('polku-kaavio');
+  if (!kortti || !div) return;
+  if (merkinnat.length < 2) { kortti.style.display = 'none'; return; }
+
+  // Muunna zone numeroiksi: yli=1, kohonnut=2, ok=3, las=2, ali=1
+  // Y-akseli: 1=kaukana optimaalista, 3=optimaalinen
+  function zoneArvo(m) {
+    const z = m.zone || getZone(m.janaArvo || 50);
+    return { yli:1, kohonnut:2, ok:3, las:2, ali:1 }[z] || 2;
+  }
+
+  // Viimeiset 30 merkintää vanhimmasta uusimpaan
+  const data = [...merkinnat].reverse().slice(-30);
+  if (data.length < 2) { kortti.style.display = 'none'; return; }
+
+  kortti.style.display = 'block';
+
+  const W = 300, H = 120;
+  const padL = 28, padR = 10, padT = 10, padB = 28;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Laske pisteet
+  const pisteet = data.map((m, i) => {
+    const x = padL + (i / (data.length - 1)) * plotW;
+    const arvo = zoneArvo(m);
+    const y = padT + plotH - ((arvo - 1) / 2) * plotH;
+    return { x, y, m, arvo };
+  });
+
+  // Väri pisteen mukaan
+  function pVari(arvo) {
+    return arvo === 3 ? '#639922' : arvo === 2 ? '#EF9F27' : '#E24B4A';
+  }
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">`;
+
+  // Tausta-alueet
+  svg += `<rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH/3}" fill="#EAF3DE" opacity="0.3" rx="2"/>`; // OK
+  svg += `<rect x="${padL}" y="${padT + plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDF3E3" opacity="0.3"/>`; // Kohonnut/Las
+  svg += `<rect x="${padL}" y="${padT + 2*plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDE8EE" opacity="0.3" rx="2"/>`; // Yli/Ali
+
+  // Y-akselit tekstit
+  svg += `<text x="${padL-4}" y="${padT + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Opt.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + plotH/2 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Koh.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + plotH + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Yli</text>`;
+
+  // Trendi-viiva
+  if (pisteet.length > 1) {
+    let path = `M ${pisteet[0].x} ${pisteet[0].y}`;
+    for (let i = 1; i < pisteet.length; i++) {
+      const p0 = pisteet[i-1], p1 = pisteet[i];
+      const cpx = (p0.x + p1.x) / 2;
+      path += ` C ${cpx} ${p0.y}, ${cpx} ${p1.y}, ${p1.x} ${p1.y}`;
+    }
+    svg += `<path d="${path}" fill="none" stroke="#ddd" stroke-width="1.5" stroke-linecap="round"/>`;
+
+    // Värikäs viiva
+    for (let i = 1; i < pisteet.length; i++) {
+      const p0 = pisteet[i-1], p1 = pisteet[i];
+      const cpx = (p0.x + p1.x) / 2;
+      const seg = `M ${p0.x} ${p0.y} C ${cpx} ${p0.y}, ${cpx} ${p1.y}, ${p1.x} ${p1.y}`;
+      svg += `<path d="${seg}" fill="none" stroke="${pVari(p1.arvo)}" stroke-width="2" stroke-linecap="round" opacity="0.7"/>`;
+    }
+  }
+
+  // Pisteet
+  pisteet.forEach((p, i) => {
+    const onViimeisin = i === pisteet.length - 1;
+    const r = onViimeisin ? 5 : 3;
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${pVari(p.arvo)}" opacity="${onViimeisin ? 1 : 0.6}"/>`;
+    if (onViimeisin) {
+      svg += `<text x="${p.x}" y="${p.y - 8}" font-size="8" fill="${pVari(p.arvo)}" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="500">nyt</text>`;
+    }
+  });
+
+  // X-akseli: ensimmäinen ja viimeinen päivämäärä
+  const ekaPvm = new Date(data[0].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
+  const vikaPvm = new Date(data[data.length-1].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
+  svg += `<text x="${padL}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="middle" font-family="DM Sans,sans-serif">${ekaPvm}</text>`;
+  svg += `<text x="${W-padR}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="end" font-family="DM Sans,sans-serif">${vikaPvm}</text>`;
+
+  // Trendi-nuoli ja teksti
+  const ensinArvo = pisteet.slice(0, 3).reduce((s,p) => s + p.arvo, 0) / 3;
+  const lopussaArvo = pisteet.slice(-3).reduce((s,p) => s + p.arvo, 0) / 3;
+  const trendi = lopussaArvo - ensinArvo;
+  const trendiTeksti = trendi > 0.3 ? '↑ Trendi kohti optimaalista' : trendi < -0.3 ? '↓ Trendi poispäin optimaalista' : '→ Tasainen vireystila';
+  const trendiVari = trendi > 0.3 ? '#3B6D11' : trendi < -0.3 ? '#E24B4A' : '#888';
+
+  svg += `</svg>`;
+  svg += `<div style="font-size:11px;font-weight:500;color:${trendiVari};margin-top:6px;text-align:center">${trendiTeksti}</div>`;
+  svg += `<div style="font-size:10px;color:#ccc;text-align:center;margin-top:2px">Viimeiset ${data.length} merkintää</div>`;
+
+  div.innerHTML = svg;
 }
 
 // SOS MODAALI
