@@ -131,7 +131,9 @@ textarea:focus{border-color:#bbb;background:#fff}
 .aanite-tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
 .aanite-tab{padding:7px 16px;border:1px solid #eee;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;color:#888;font-family:'DM Sans',sans-serif;transition:all 0.12s;font-weight:500}
 .aanite-tab-yli.active{background:#FAECE7;color:#712B13;border-color:#FAECE7}
+.aanite-tab-koh.active{background:#FDF3E3;color:#633806;border-color:#F5DFB8}
 .aanite-tab-ok.active{background:#EAF3DE;color:#27500A;border-color:#EAF3DE}
+.aanite-tab-las.active{background:#E3EEF9;color:#185FA5;border-color:#B8D4EF}
 .aanite-tab-ali.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
 .aanite-zone-title{font-size:12px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:1rem}
 .aanite-card{border:1px solid #eee;border-radius:10px;padding:1rem;margin-bottom:0.75rem;background:#fafafa}
@@ -461,7 +463,9 @@ textarea:focus{border-color:#bbb;background:#fff}
   <div id="screen-aanitteet" class="screen">
     <div class="aanite-tabs">
       <button class="aanite-tab aanite-tab-yli active" onclick="setAaniteTab('yli',this)">&#128308; Ylivirittynyt</button>
+      <button class="aanite-tab aanite-tab-koh" onclick="setAaniteTab('koh',this)">🟠 Kohonnut</button>
       <button class="aanite-tab aanite-tab-ok" onclick="setAaniteTab('ok',this)">&#128994; Optimaalinen</button>
+      <button class="aanite-tab aanite-tab-las" onclick="setAaniteTab('las',this)">🔵 Laskenut</button>
       <button class="aanite-tab aanite-tab-ali" onclick="setAaniteTab('ali',this)">&#128309; Alivireystila</button>
     </div>
 
@@ -521,6 +525,36 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
     </div>
 
+    <div id="aanite-panel-koh" style="display:none">
+      <p class="aanite-zone-title">Rauhoittavat harjoitukset kohonneeseen vireystilaan</p>
+      <div class="aanite-card">
+        <div class="aanite-name">Äänite 1 — 4+7+8 hengitysharjoitus</div>
+        <div class="aanite-desc">Tehokas hengitysharjoitus kohonneen vireystilan säätelyyn</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-koh-1" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-1')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-koh-1" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-1',this.value)">
+            <div class="aanite-time"><span id="acur-koh-1">0:00</span><span id="adur-koh-1">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-koh-1" src="" preload="metadata" ontimeupdate="updateAanite('koh-1')" onended="aaniteEnded('koh-1')" onloadedmetadata="setAaniteDur('koh-1')"></audio>
+        <div class="aanite-locked" id="alock-koh-1">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
+      <div class="aanite-card">
+        <div class="aanite-name">Äänite 2 — Turvan ankkurointi</div>
+        <div class="aanite-desc">Turvan kokemuksen aktivointi kehossa</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-koh-2" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-2')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-koh-2" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-2',this.value)">
+            <div class="aanite-time"><span id="acur-koh-2">0:00</span><span id="adur-koh-2">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-koh-2" src="" preload="metadata" ontimeupdate="updateAanite('koh-2')" onended="aaniteEnded('koh-2')" onloadedmetadata="setAaniteDur('koh-2')"></audio>
+        <div class="aanite-locked" id="alock-koh-2">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
+    </div>
+
     <div id="aanite-panel-ok" style="display:none">
       <p class="aanite-zone-title">Läsnäolo- ja ylläpitoharjoitukset optimaaliselle vyöhykkeelle</p>
       <div class="aanite-card">
@@ -574,6 +608,36 @@ textarea:focus{border-color:#bbb;background:#fff}
         </div>
         <audio id="aaudio-ok-4" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/10.-Ajatuksista-irtipaastaminen-meditaatio.mp3" preload="metadata" ontimeupdate="updateAanite('ok-4')" onended="aaniteEnded('ok-4')" onloadedmetadata="setAaniteDur('ok-4')"></audio>
         <div class="aanite-locked" id="alock-ok-4">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
+    </div>
+
+    <div id="aanite-panel-las" style="display:none">
+      <p class="aanite-zone-title">Aktivoivat harjoitukset laskenneeseen vireystilaan</p>
+      <div class="aanite-card">
+        <div class="aanite-name">Äänite 1 — Jännitä ja rentouta</div>
+        <div class="aanite-desc">Lyhyt ja tehokas harjoitus vireystilan nostamiseen</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-las-1" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-1')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-las-1" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-1',this.value)">
+            <div class="aanite-time"><span id="acur-las-1">0:00</span><span id="adur-las-1">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-las-1" src="" preload="metadata" ontimeupdate="updateAanite('las-1')" onended="aaniteEnded('las-1')" onloadedmetadata="setAaniteDur('las-1')"></audio>
+        <div class="aanite-locked" id="alock-las-1">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
+      <div class="aanite-card">
+        <div class="aanite-name">Äänite 2 — Kävelyrytmin muuttaminen</div>
+        <div class="aanite-desc">Aktivoiva liikuntaharjoitus</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-las-2" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-2')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-las-2" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-2',this.value)">
+            <div class="aanite-time"><span id="acur-las-2">0:00</span><span id="adur-las-2">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-las-2" src="" preload="metadata" ontimeupdate="updateAanite('las-2')" onended="aaniteEnded('las-2')" onloadedmetadata="setAaniteDur('las-2')"></audio>
+        <div class="aanite-locked" id="alock-las-2">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
       </div>
     </div>
 
@@ -1028,6 +1092,8 @@ const OIREET={
     {t:'Kehon tarpeiden ohittaminen',z:'kohonnut'},
     {t:'Toiminta sujuu luontevasti',z:'ok'},
     {t:'Kyky asettaa omia rajoja',z:'ok'},
+    {t:'Tekeminen hidastuu',z:'las'},
+    {t:'Motivaatio laskee',z:'las'},
     {t:'Tekeminen pysähtyy',z:'ali'},
     {t:'Eristäytyminen',z:'ali'}
   ]
@@ -1079,7 +1145,7 @@ const KEH={
     {n:'Venyttely lattialla',d:'5 min vapaa venyttely lattialla ilman ohjelmaa.'},
     {n:'Silmien pyöritys',d:'Pyöritä silmiä hitaasti 5 kierrosta molempiin suuntiin.'}
   ],
-  ali:[
+  las:[
     {n:'Ravistelu',d:'Ravistele käsiä, jalkoja, koko kehoa 1–2 min.'},
     {n:'Nopea hengitys',d:'Hengitä nopeammin 20 s kuin puhaltaisi kynttilää.'},
     {n:'Kylmä vesi ranteille',d:'Pidä ranteita kylmässä vedessä 20 s.'},
@@ -1134,7 +1200,7 @@ const PILARIT={
     {n:'Sosiaaliset kontaktit',tip:'Laadukkaat ihmissuhteet ovat tärkeämpiä kuin monet ajattelevat.',miksi:'Hermosto säätelee itseään suhteessa toisiin. Turvalliset ihmissuhteet ovat biologinen tarve.'},
     {n:'Ravinto ja nesteytys',tip:'Säännölliset ateriat, riittävä nesteytys.',miksi:'Verensokerin tasaisuus vaikuttaa suoraan hermoston stressireaktioherkkyteen.'}
   ],
-  ali:[
+  las:[
     {n:'Liikkuminen',tip:'Reipas kävely tai muu aktivoiva liike.',miksi:'Alivireisyys on hermoston säästömoodi. Fyysinen aktivaatio on tehokkain tapa käynnistää hermosto uudelleen.'},
     {n:'Ravinto',tip:'Syötkö tarpeeksi?',miksi:'Matala verensokeri laskee hermoston aktivaatiotasoa suoraan.'},
     {n:'Uni',tip:'Onko kyseessä väsymys vai hermoston alivireisyys?',miksi:'Lyhyt 20 min lepo voi palauttaa — pidempi voi syventää alivireisyyttä.'},
@@ -1164,7 +1230,7 @@ const YLLAPITO={
     {n:'Ylläpitävien rakenteiden vahvistaminen',d:'Mikä arjessa pitää sinut säätelyikkunassa? Nimeä ne ja suojele niitä aktiivisesti.'},
     {n:'Oma toimijuus',d:'Säätelyikkunassa oleminen ei ole sattumaa — se on seurausta valinnoista jotka olet tehnyt.'}
   ],
-  ali:[
+  las:[
     {n:'Aktivoivien elementtien lista',d:'Mitkä asiat arjessa lisäävät energiaa? Kirjaa 5–10 asiaa ja suunnittele niitä viikkoon.'},
     {n:'Passiivinen vetäytyminen vs. palauttava lepo',d:'Passiivinen vetäytyminen voi syventää alivireisyyttä. Palauttava lepo tehdään tietoisesti.'},
     {n:'Oma toimijuus',d:'Pienikin tietoinen teko on todiste siitä, että pystyt vaikuttamaan omaan tilaasi.'}
@@ -1389,7 +1455,7 @@ function setAaniteTab(tab,btn){
   curAaniteTab=tab;
   document.querySelectorAll('.aanite-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  ['yli','ok','ali'].forEach(k=>{
+  ['yli','koh','ok','las','ali'].forEach(k=>{
     const p=document.getElementById('aanite-panel-'+k);
     if(p)p.style.display=(k===tab)?'block':'none';
   });
@@ -1913,32 +1979,41 @@ function piirraKehityskaavio(merkinnat) {
 
   function zoneArvo(m) {
     const z = m.zone || getZone(m.janaArvo || 50);
-    return { yli:1, kohonnut:2, ok:3, las:2, ali:1 }[z] || 2;
+    return { yli:1, kohonnut:2, ok:3, las:4, ali:5 }[z] || 3;
   }
 
-  const W = 300, H = 130;
-  const padL = 28, padR = 10, padT = 10, padB = 28;
+  const W = 300, H = 150;
+  const padL = 32, padR = 10, padT = 10, padB = 28;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
 
   const pisteet = data.map((m, i) => {
     const x = padL + (i / (data.length - 1)) * plotW;
     const arvo = zoneArvo(m);
-    const y = padT + plotH - ((arvo - 1) / 2) * plotH;
+    const y = padT + plotH - ((arvo - 1) / 4) * plotH;
     return { x, y, m, arvo };
   });
 
   function pVari(arvo) {
-    return arvo === 3 ? '#639922' : arvo === 2 ? '#EF9F27' : '#E24B4A';
+    if (arvo === 3) return '#639922';
+    if (arvo === 2 || arvo === 4) return '#EF9F27';
+    if (arvo === 1) return '#E24B4A';
+    if (arvo === 5) return '#7F77DD';
+    return '#EF9F27';
   }
 
+  const segH = plotH / 4;
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">`;
-  svg += `<rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH/3}" fill="#EAF3DE" opacity="0.3" rx="2"/>`;
-  svg += `<rect x="${padL}" y="${padT + plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDF3E3" opacity="0.3"/>`;
-  svg += `<rect x="${padL}" y="${padT + 2*plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDE8EE" opacity="0.3" rx="2"/>`;
-  svg += `<text x="${padL-4}" y="${padT + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Opt.</text>`;
-  svg += `<text x="${padL-4}" y="${padT + plotH/2 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Koh.</text>`;
-  svg += `<text x="${padL-4}" y="${padT + plotH + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Yli</text>`;
+  svg += `<rect x="${padL}" y="${padT + segH*0}" width="${plotW}" height="${segH}" fill="#FDE8EE" opacity="0.5" rx="2"/>`;
+  svg += `<rect x="${padL}" y="${padT + segH*1}" width="${plotW}" height="${segH}" fill="#FDF3E3" opacity="0.5"/>`;
+  svg += `<rect x="${padL}" y="${padT + segH*1.5}" width="${plotW}" height="${segH*1}" fill="#EAF3DE" opacity="0.6"/>`;
+  svg += `<rect x="${padL}" y="${padT + segH*2}" width="${plotW}" height="${segH}" fill="#E3EEF9" opacity="0.5"/>`;
+  svg += `<rect x="${padL}" y="${padT + segH*3}" width="${plotW}" height="${segH}" fill="#EEEDFE" opacity="0.5" rx="2"/>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*0 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Yli</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*1 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Koh.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*2 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Opt.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*3 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Las.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*4 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Ali</text>`;
 
   if (pisteet.length > 1) {
     let path = `M ${pisteet[0].x} ${pisteet[0].y}`;
@@ -1986,7 +2061,9 @@ function piirraKehityskaavio(merkinnat) {
 
   const ensinArvo = pisteet.slice(0, Math.min(3, pisteet.length)).reduce((s,p) => s + p.arvo, 0) / Math.min(3, pisteet.length);
   const lopussaArvo = pisteet.slice(-Math.min(3, pisteet.length)).reduce((s,p) => s + p.arvo, 0) / Math.min(3, pisteet.length);
-  const trendi = lopussaArvo - ensinArvo;
+  const ensinEtaisyys = Math.abs(ensinArvo - 3);
+  const lopussaEtaisyys = Math.abs(lopussaArvo - 3);
+  const trendi = ensinEtaisyys - lopussaEtaisyys;
   const trendiTeksti = trendi > 0.3 ? '↑ Trendi kohti optimaalista' : trendi < -0.3 ? '↓ Trendi poispäin optimaalista' : '→ Tasainen vireystila';
   const trendiVari = trendi > 0.3 ? '#3B6D11' : trendi < -0.3 ? '#E24B4A' : '#888';
 
