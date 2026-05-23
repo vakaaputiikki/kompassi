@@ -187,7 +187,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <div class="header-sub">Tunnista vireystilasi ja löydä sopivat harjoitteet</div>
   </div>
   <div class="nav">
-    <button class="nav-btn active" onclick="showScreen('kirjaa',this)">Kirjaa</button>
+    <button class="nav-btn active" onclick="showScreen('kirjaa',this)">Vireystilat</button>
     <button class="nav-btn" onclick="showScreen('harjoitteet',this)">Harjoitteet</button>
     <button class="nav-btn" onclick="showScreen('aanitteet',this)">Äänitteet</button>
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
@@ -282,7 +282,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
 
       <div style="font-size:13px;color:#666;line-height:1.7;padding:10px;background:#FDE8EE;border-radius:8px;margin-bottom:1rem">
-        Paha olo menee ohi. Et ole yksin. Alla on ihmisiä joihin voit ottaa yhteyttä ja asioita jotka voivat auttaa juuri nyt.
+        Paha olo menee kyllä ohi. Et ole yksin. Alla on ihmisiä joihin voit ottaa yhteyttä ja asioita jotka voivat auttaa juuri nyt.
       </div>
 
       <a href="tel:092525111" style="display:flex;align-items:center;gap:12px;padding:12px;background:#FDE8EE;border-radius:10px;text-decoration:none;margin-bottom:8px">
@@ -392,7 +392,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
     </div>
     <div class="card">
-      <div class="step-row"><span class="step-num">3</span><span class="step-title">Huomioita (vapaaehtoinen)</span></div>
+      <div class="step-row"><span class="step-num">3</span><span class="step-title">Huomioita</span></div>
       <textarea id="nota" placeholder="Mitä tapahtui ennen tätä tilaa? Mikä auttoi? Mitä huomasit..."></textarea>
     </div>
     <button class="btn primary" onclick="tallenna()" style="width:100%;margin-bottom:8px">&#10003; Tallenna merkintä</button>
@@ -880,7 +880,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:1rem">
       <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">👃 Voimakas tuoksu<br><span style="color:#aaa;font-size:11px">esim. laventeli, minttu</span></div>
       <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">👅 Voimakas maku<br><span style="color:#aaa;font-size:11px">esim. hapan karkki, chili</span></div>
-      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">🖐 Tunnettava esine<br><span style="color:#aaa;font-size:11px">esim. kivi, stressipallo</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">🖐 Esine joka tuntuu kädessä mukavalle<br><span style="color:#aaa;font-size:11px">esim. kivi, stressipallo</span></div>
       <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">☕ Lämmin juoma<br><span style="color:#aaa;font-size:11px">esim. teepussi, kaakao</span></div>
       <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">📸 Tärkeä kuva<br><span style="color:#aaa;font-size:11px">ihminen, paikka, muisto</span></div>
       <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">📝 Oma viesti<br><span style="color:#aaa;font-size:11px">kirje itsellesi</span></div>
@@ -982,11 +982,11 @@ textarea:focus{border-color:#bbb;background:#fff}
 <script>
 const OIREET={
   keho:[
-    {t:'Sydän hakkaa / syke nousee',z:'yli'},{t:'Lihasjännitys',z:'yli'},
-    {t:'Kehon säryt lisääntyvät',z:'yli'},{t:'Hengitys tiukkaa',z:'yli'},
-    {t:'Kädet hikoavat',z:'yli'},{t:'Vatsa kiristää',z:'yli'},
+    {t:'Sydän hakkaa / syke nousee',z:'yli'},{t:'Lihakset jännittyy',z:'yli'},
+    {t:'Kehon säryt lisääntyvät',z:'yli'},{t:'Hengitys raskasta',z:'yli'},
+    {t:'Kädet hikoavat',z:'yli'},{t:'Vatsaa kiristää',z:'yli'},
     {t:'Aistit herkillä',z:'yli'},{t:'Unettomuus',z:'yli'},
-    {t:'Olo painava tai väsynyt',z:'ali'},{t:'Liike vaivallloista',z:'ali'},
+    {t:'Olo raskas tai väsynyt',z:'ali'},{t:'Liike vaivalloista',z:'ali'},
     {t:'Kädet tai jalat raskaat',z:'ali'},{t:'Voimakas väsymys',z:'ali'},
     {t:'Turtuneisuus',z:'ali'},{t:'Keho tuntuu etäiseltä',z:'jah'},
     {t:'Puutumisen tunne',z:'jah'},{t:'Keho rauhallinen',z:'ok'},
@@ -1015,32 +1015,32 @@ const OIREET={
 
 const KEH={
   yli:[
-    {n:'Pitkä uloshengitys',d:'Hengitä ulos 6–8 s. Toista 5 kertaa. Aktivoi parasympaattisen hermoston.'},
-    {n:'Jalojen painaminen lattiaan',d:'Tunne lattia jalkapohjien alla. Paina 10 s ja rentouta. Toista 3×.'},
+    {n:'Pitkä uloshengitys',d:'Hengitä ulos nenän kautta rauhallisesti ulos 6–8 sekunnin ajan. Toista 5 kertaa. Aktivoi parasympaattisen hermoston.'},
+    {n:'Jalkojen painaminen lattiaan',d:'Tunne lattia jalkapohjien alla. Paina jalkoja lattiaan 10 sekunnin ajan ja rentouta. Toista 3×.'},
     {n:'Kylmä vesi kasvoille',d:'Roiski kylmää vettä kasvoille tai pidä ranteita kylmässä vedessä 20 s.'},
-    {n:'5-4-3-2-1 aistit',d:'5 näkemääsi, 4 kuulemaasi, 3 kosketettavaa, 2 haistettavaa, 1 maistettava.'},
-    {n:'Hartioiden pudottaminen',d:'Nosta hartiat korviin, pidä 3 s, pudota. Toista 5×.'},
+    {n:'5-4-3-2-1 aistit',d:'Kuvaile 5 asiaa jotka näet, 4 asiaa jotka kuulet, 3 asiaa johon voit koskettaa, 2 asiaa jota voit haistella, 1 asia jota voit maistella.'},
+    {n:'Hartioiden pudottaminen',d:'Nosta hartiat korviin, pidä 3 sekunnin ajan, pudota. Toista 5×.'},
     {n:'Käsien puristaminen nyrkkiin',d:'Purista nyrkit tiukalle 5 s, avaa hitaasti. Toista 4×.'},
-    {n:'Hidas kävely huoneessa',d:'Kävele todella hitaasti, askel kerrallaan. Kiinnitä huomio jokaiseen askeleeseen.'},
-    {n:'Leuan rentouttaminen',d:'Sulje silmät, laske leuka löysäksi, anna hampaiden erkaantua. Pidä 30 s.'},
-    {n:'Silmien painaminen kiinni',d:'Peitä silmät kämmeniä vasten ilman painetta 1 min.'},
-    {n:'Niskan hidas kierto',d:'Kierrä pää hitaasti oikealle, alas, vasemmalle. Hengitä ulos alhaalla. 3 kierrosta.'},
+    {n:'Hidas ja tietoinen kävely',d:'Kävele todella hitaasti ja tietoisesti, askel kerrallaan. Kiinnitä huomio jokaiseen askeleeseen.'},
+    {n:'Leuan rentouttaminen',d:'Sulje silmät, laske leuka rennoksi, anna hampaiden erkaantua. Pidä 30 s.'},
+    {n:'Silmien painaminen kiinni',d:'Peitä silmät kämmeniä vasten lempeästi 1 minuutin ajan. Aistien rauhoittaminen, rauhoittaa myös kehoa ja mieltä.'},
+    {n:'Niskan hidas kierto',d:'Kierrä pää hitaasti ja tietoisesti oikealle, alas, vasemmalle. Muista hengittää. Monesti kun me tehdään harjoituksia saatamme hetkellisesti lopettaa hengittämisen. 3 kierrosta.'},
     {n:'Äänellinen huokaus',d:'Huokaise ääneen ulos, anna äänen tulla vapaasti. Toista 5×.'},
     {n:'Käsien hierominen',d:'Hiero kämmeniä vastakkain hitaasti 30 s.'},
-    {n:'Istu maahan',d:'Istu lattialle ristiin tai selälle. Matala tila viestittää turvallisuudesta.'},
+    {n:'Istu tai makaa hetki',d:'Istu lattialla jalat ristissä tai makaa selällään. Tunne koko keho. Koko keho päästä varpaisiin. Hengitä luonnolliseen tahtiin.'},
     {n:'Hidas laskeminen',d:'Laske hitaasti mielessä 20:stä 1:een. Vie ajatus pois kierteestä.'},
-    {n:'Selälle venyttely',d:'Istu reunalla, anna ylävartalon roikkua eteenpäin 30 s.'}
+    {n:'Pidennys heilahdus',d:'Nouse seisomaan. Nosta kädet ylös kohti taiasti. Tee eteentaivutus samalla heilauttaen käsiä rennosti mukana. Muista hengittää. Tee muutaman kerran.'}
   ],
   kohonnut:[
     {n:'Fysiologinen huokaus',d:'Kaksi nopeaa sisäänhengitystä nenästä, sitten hidas pitkä ulos suusta.'},
     {n:'Hartioiden laskeminen',d:'Laske hartiat tietoisesti 5× hengityksen tahdissa.'},
-    {n:'4-4-6 hengitys',d:'Sisään 4 s, pidätä 4 s, ulos 6 s. Pidempi uloshengitys rauhoittaa.'},
+    {n:'4-4-6 hengitys',d:' Hengitä sisään laskien neljään, pidätä hengitystä laskien neljään, hengitä ulos laskien kuuteen. Pidempi uloshengitys rauhoittaa.'},
     {n:'Venyttely seisten',d:'Nosta kädet ylös, venytä kylkiä vuorotellen. 5× per puoli.'},
     {n:'Kylmä vesi ranteille',d:'Pidä ranteita kylmässä vedessä 20 s.'},
-    {n:'Leuan rentouttaminen',d:'Laske leuka löysäksi, anna hampaiden erkaantua.'},
+    {n:'Leuan rentouttaminen',d:'Laske leuka rennoksi, anna hampaiden erkaantua.'},
     {n:'Silmien sulkeminen 1 min',d:'Sulje silmät, hengitä rauhallisesti.'},
     {n:'Niska-hartiahieronta',d:'Hiero niskan sivuja ja hartioita 2 min.'},
-    {n:'Tietoinen juominen',d:'Juo lasi vettä hitaasti, huomio jokaisessa siemauksessa.'},
+    {n:'Tietoinen juominen',d:'Juo lasi kylmää vettä hitaasti ja tietoisesti, huomio jokaisessa siemauksessa.'},
     {n:'Hidas kävely',d:'5 min rauhallinen kävely, huomio jalkapohjissa.'},
     {n:'Käsien hierominen',d:'Hiero kämmeniä vastakkain hitaasti 30 s.'},
     {n:'Huokaus seisten',d:'Nouse seisomaan, huokaise ääneen, ravista käsiä löysästi.'}
