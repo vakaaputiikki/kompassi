@@ -193,6 +193,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
     <button class="nav-btn" onclick="showScreen('ohje',this)">Ohje</button>
     <button class="nav-btn" onclick="showScreen('digivalmennus',this)">Digivalmennus</button>
+    <button class="nav-btn" onclick="showScreen('sos',this)" style="color:#E24B4A">SOS</button>
   </div>
 
   <!-- KIRJAA -->
@@ -681,6 +682,109 @@ textarea:focus{border-color:#bbb;background:#fff}
 </div>
 <!-- END OHJE -->
 
+<!-- SOS -->
+<div id="screen-sos" class="screen">
+
+  <div class="card" style="border-color:#E24B4A;border-width:1.5px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem">
+      <div style="width:36px;height:36px;border-radius:50%;background:#FDE8EE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🆘</div>
+      <div>
+        <div style="font-size:15px;font-weight:500;color:#E24B4A">Tämä sivu on sinua varten</div>
+        <div style="font-size:12px;color:#888">Jos olo on todella paha – olet oikeassa paikassa</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#666;line-height:1.7;padding:10px;background:#FDE8EE;border-radius:8px">
+      Paha olo menee ohi. Et ole yksin. Tällä sivulla on ihmisiä joihin voit ottaa yhteyttä ja asioita jotka voivat auttaa juuri nyt.
+    </div>
+  </div>
+
+  <!-- Kriisiapua -->
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.75rem">Kriisiapua heti</div>
+    <a href="tel:092525111" style="display:flex;align-items:center;gap:12px;padding:12px;background:#FDE8EE;border-radius:10px;text-decoration:none;margin-bottom:8px">
+      <div style="font-size:24px">📞</div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#712B13">MIELI Kriisipuhelin</div>
+        <div style="font-size:13px;color:#E24B4A;font-weight:500">09 2525 0111</div>
+        <div style="font-size:11px;color:#993C1D">Auki 24/7 – soita heti</div>
+      </div>
+    </a>
+    <a href="tel:112" style="display:flex;align-items:center;gap:12px;padding:12px;background:#f5f5f5;border-radius:10px;text-decoration:none">
+      <div style="font-size:24px">🚨</div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#1a1a1a">Hätänumero</div>
+        <div style="font-size:13px;color:#E24B4A;font-weight:500">112</div>
+        <div style="font-size:11px;color:#888">Jos henki on vaarassa</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Omat yhteystiedot -->
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.5rem">Minun turvaihmiset</div>
+    <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:1rem">Kirjoita tähän nimet ja numerot ihmisistä joihin voit soittaa kun on paha olla. Tallentuu vain omalle laitteellesi.</div>
+    <div id="sos-yhteystiedot-lista"></div>
+
+    <!-- Lisäyslomake -->
+    <div id="sos-lisays-lomake" style="display:none;margin-top:0.75rem;padding:12px;background:#fafafa;border-radius:10px;border:1px solid #eee">
+      <div style="font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:8px">Lisää turvaihminen</div>
+      <input id="sos-uusi-nimi" type="text" placeholder="Nimi" style="width:100%;padding:8px 12px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:6px">
+      <input id="sos-uusi-puh" type="tel" placeholder="Puhelinnumero" style="width:100%;padding:8px 12px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:8px">
+      <div style="display:flex;gap:6px">
+        <button class="btn primary" onclick="tallennaTurvaHenkilo()" style="flex:1">Tallenna</button>
+        <button class="btn" onclick="document.getElementById('sos-lisays-lomake').style.display='none'">Peruuta</button>
+      </div>
+    </div>
+
+    <button class="btn" onclick="document.getElementById('sos-lisays-lomake').style.display='block';document.getElementById('sos-uusi-nimi').focus()" style="width:100%;margin-top:0.5rem;border-style:dashed">+ Lisää turvaihminen</button>
+  </div>
+
+  <!-- Kriisiboksi -->
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.5rem">Kriisiboksini 📦</div>
+    <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:1rem">
+      Kriisiboksi on fyysinen laatikko jonka rakennat itse. Sinne laitat asioita jotka aktivoivat aistejasi ja auttavat rauhoittumaan.<br><br>
+      <strong style="color:#1a1a1a">Esimerkkejä mitä boksiin voi laittaa:</strong>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:1rem">
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">👃 Voimakas tuoksu<br><span style="color:#aaa;font-size:11px">esim. laventeli, minttu</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">👅 Voimakas maku<br><span style="color:#aaa;font-size:11px">esim. hapan karkki, chili</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">🖐 Tunnettava esine<br><span style="color:#aaa;font-size:11px">esim. kivi, stressipallo</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">☕ Lämmin juoma<br><span style="color:#aaa;font-size:11px">esim. teepussi, kaakao</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">📸 Tärkeä kuva<br><span style="color:#aaa;font-size:11px">ihminen, paikka, muisto</span></div>
+      <div style="padding:8px 10px;background:#f5f5f5;border-radius:8px;font-size:12px;color:#555">📝 Oma viesti<br><span style="color:#aaa;font-size:11px">kirje itsellesi</span></div>
+    </div>
+    <div style="font-size:12px;color:#777;margin-bottom:0.75rem">Mitä sinun boksissa on? Kirjaa tähän:</div>
+    <textarea id="sos-boksi" placeholder="Kirjaa tähän mitä boksiisi laitat tai on jo laitettu..." style="width:100%;min-height:80px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none" oninput="tallennaSosBoksi()"></textarea>
+    <div style="font-size:11px;color:#ccc;text-align:right;margin-top:4px">Tallentuu automaattisesti</div>
+  </div>
+
+  <!-- Nyt heti -->
+  <div class="card" style="background:#EAF3DE;border-color:#C0DD97">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:0.75rem">Tee tämä juuri nyt 🌱</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:#3B6D11">
+        <span style="flex-shrink:0">1.</span>
+        <span>Laita kädet sydämelle. Tunnista sydämesi lyönti.</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:#3B6D11">
+        <span style="flex-shrink:0">2.</span>
+        <span>Hengitä ulos hitaasti – uloshengitys pidempänä kuin sisäänhengitys.</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:#3B6D11">
+        <span style="flex-shrink:0">3.</span>
+        <span>Nimeä 5 asiaa joita näet ympärilläsi.</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:#3B6D11">
+        <span style="flex-shrink:0">4.</span>
+        <span>Soita jollekin turvaihmisellesi tai kriisipuhelimeen.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END SOS -->
+
 <!-- DIGIVALMENNUS -->
 <div id="screen-digivalmennus" class="screen">
 
@@ -978,6 +1082,7 @@ function showScreen(id,btn){
   if(id==='harjoitteet')renderHarjoitteet();
   if(id==='polku')renderPolku();
   if(id==='ohje')setTimeout(paivitaMuistutusTila, 50);
+  if(id==='sos')alustaSos();
 }
 
 function renderOireet(){
@@ -1506,6 +1611,71 @@ function sulkePalkinto() {
     tahti.classList.remove('tahti-anim');
     luku.classList.remove('luku-anim');
   }, 250);
+}
+
+// SOS
+function renderSosYhteystiedot() {
+  try {
+    const lista = JSON.parse(localStorage.getItem('sos_yhteystiedot') || '[]');
+    const div = document.getElementById('sos-yhteystiedot-lista');
+    if (!div) return;
+    if (lista.length === 0) {
+      div.innerHTML = '<div style="font-size:12px;color:#ccc;padding:4px 0">Ei vielä turvaihmisiä lisätty.</div>';
+      return;
+    }
+    div.innerHTML = lista.map((h, i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5">
+        <div style="width:36px;height:36px;border-radius:50%;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">👤</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500;color:#1a1a1a">${h.nimi || 'Turvaihminen'}</div>
+          ${h.puh ? `<a href="tel:${h.puh.replace(/\s/g,'')}" style="font-size:12px;color:#378ADD;text-decoration:none">${h.puh}</a>` : '<div style="font-size:12px;color:#ccc">Ei numeroa</div>'}
+        </div>
+        ${h.puh ? `<a href="tel:${h.puh.replace(/\s/g,'')}" style="padding:7px 14px;background:#EAF3DE;border-radius:8px;font-size:12px;color:#3B6D11;text-decoration:none;font-weight:500">Soita</a>` : ''}
+        <button onclick="poistaTurvaHenkilo(${i})" style="border:none;background:none;cursor:pointer;font-size:16px;color:#ddd;padding:4px">✕</button>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+function tallennaTurvaHenkilo() {
+  const nimi = document.getElementById('sos-uusi-nimi').value.trim();
+  const puh = document.getElementById('sos-uusi-puh').value.trim();
+  if (!nimi) {
+    document.getElementById('sos-uusi-nimi').focus();
+    return;
+  }
+  try {
+    const lista = JSON.parse(localStorage.getItem('sos_yhteystiedot') || '[]');
+    lista.push({ nimi, puh });
+    localStorage.setItem('sos_yhteystiedot', JSON.stringify(lista));
+    document.getElementById('sos-uusi-nimi').value = '';
+    document.getElementById('sos-uusi-puh').value = '';
+    document.getElementById('sos-lisays-lomake').style.display = 'none';
+    renderSosYhteystiedot();
+  } catch(e) {}
+}
+
+function poistaTurvaHenkilo(idx) {
+  if (!confirm('Poistetaanko tämä turvaihminen?')) return;
+  try {
+    const lista = JSON.parse(localStorage.getItem('sos_yhteystiedot') || '[]');
+    lista.splice(idx, 1);
+    localStorage.setItem('sos_yhteystiedot', JSON.stringify(lista));
+    renderSosYhteystiedot();
+  } catch(e) {}
+}
+
+function tallennaSosBoksi() {
+  const teksti = document.getElementById('sos-boksi').value;
+  localStorage.setItem('sos_boksi', teksti);
+}
+
+function alustaSos() {
+  renderSosYhteystiedot();
+  try {
+    const boksi = localStorage.getItem('sos_boksi') || '';
+    const el = document.getElementById('sos-boksi');
+    if (el) el.value = boksi;
+  } catch(e) {}
 }
 
 // DIGIVALMENNUS
