@@ -640,7 +640,14 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <!-- Kehityskaavio -->
     <div id="polku-kaavio-kortti" class="card" style="display:none;margin-bottom:1rem">
-      <div class="slabel" style="margin-bottom:0.75rem">Vireystila ajan myötä</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;flex-wrap:wrap;gap:8px">
+        <div class="slabel" style="margin-bottom:0">Vireystila ajan myötä</div>
+        <div style="display:flex;gap:4px">
+          <button onclick="vaihdaKaavioAikaväli('viikko',this)" id="kaavio-btn-viikko" style="padding:4px 10px;border:1px solid #1a1a1a;border-radius:20px;background:#1a1a1a;color:#fff;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Viikko</button>
+          <button onclick="vaihdaKaavioAikaväli('kuukausi',this)" id="kaavio-btn-kuukausi" style="padding:4px 10px;border:1px solid #eee;border-radius:20px;background:#fff;color:#888;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Kuukausi</button>
+          <button onclick="vaihdaKaavioAikaväli('kaikki',this)" id="kaavio-btn-kaikki" style="padding:4px 10px;border:1px solid #eee;border-radius:20px;background:#fff;color:#888;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Kaikki</button>
+        </div>
+      </div>
       <div id="polku-kaavio"></div>
     </div>
 
@@ -1819,31 +1826,62 @@ function laskeReflektio(merkinnat, harjoitukset, aanitteet) {
   `;
 }
 
+let kaavioAikavali = 'viikko';
+
+function vaihdaKaavioAikaväli(aikaväli, btn) {
+  kaavioAikavali = aikaväli;
+  ['viikko','kuukausi','kaikki'].forEach(v => {
+    const b = document.getElementById('kaavio-btn-' + v);
+    if (!b) return;
+    if (v === aikaväli) {
+      b.style.background = '#1a1a1a'; b.style.color = '#fff'; b.style.borderColor = '#1a1a1a';
+    } else {
+      b.style.background = '#fff'; b.style.color = '#888'; b.style.borderColor = '#eee';
+    }
+  });
+  try {
+    const merkinnat = JSON.parse(localStorage.getItem('vk1') || '[]');
+    piirraKehityskaavio(merkinnat);
+  } catch(e) {}
+}
+
 function piirraKehityskaavio(merkinnat) {
   const kortti = document.getElementById('polku-kaavio-kortti');
   const div = document.getElementById('polku-kaavio');
   if (!kortti || !div) return;
   if (merkinnat.length < 2) { kortti.style.display = 'none'; return; }
 
-  // Muunna zone numeroiksi: yli=1, kohonnut=2, ok=3, las=2, ali=1
-  // Y-akseli: 1=kaukana optimaalista, 3=optimaalinen
+  // Suodata aikavälin mukaan
+  const nyt = new Date();
+  let suodatettu = [...merkinnat].reverse();
+  if (kaavioAikavali === 'viikko') {
+    const raja = new Date(nyt - 7 * 24 * 60 * 60 * 1000);
+    suodatettu = suodatettu.filter(m => new Date(m.aika) >= raja);
+  } else if (kaavioAikavali === 'kuukausi') {
+    const raja = new Date(nyt - 30 * 24 * 60 * 60 * 1000);
+    suodatettu = suodatettu.filter(m => new Date(m.aika) >= raja);
+  }
+  // 'kaikki' näyttää kaikki – mutta max 60 pistettä
+  const data = suodatettu.slice(-60);
+
+  if (data.length < 2) {
+    kortti.style.display = 'block';
+    div.innerHTML = '<div style="text-align:center;padding:1.5rem;font-size:12px;color:#ccc">Ei tarpeeksi merkintöjä valitulla aikavälillä</div>';
+    return;
+  }
+
+  kortti.style.display = 'block';
+
   function zoneArvo(m) {
     const z = m.zone || getZone(m.janaArvo || 50);
     return { yli:1, kohonnut:2, ok:3, las:2, ali:1 }[z] || 2;
   }
 
-  // Viimeiset 30 merkintää vanhimmasta uusimpaan
-  const data = [...merkinnat].reverse().slice(-30);
-  if (data.length < 2) { kortti.style.display = 'none'; return; }
-
-  kortti.style.display = 'block';
-
-  const W = 300, H = 120;
+  const W = 300, H = 130;
   const padL = 28, padR = 10, padT = 10, padB = 28;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
 
-  // Laske pisteet
   const pisteet = data.map((m, i) => {
     const x = padL + (i / (data.length - 1)) * plotW;
     const arvo = zoneArvo(m);
@@ -1851,24 +1889,18 @@ function piirraKehityskaavio(merkinnat) {
     return { x, y, m, arvo };
   });
 
-  // Väri pisteen mukaan
   function pVari(arvo) {
     return arvo === 3 ? '#639922' : arvo === 2 ? '#EF9F27' : '#E24B4A';
   }
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">`;
-
-  // Tausta-alueet
-  svg += `<rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH/3}" fill="#EAF3DE" opacity="0.3" rx="2"/>`; // OK
-  svg += `<rect x="${padL}" y="${padT + plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDF3E3" opacity="0.3"/>`; // Kohonnut/Las
-  svg += `<rect x="${padL}" y="${padT + 2*plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDE8EE" opacity="0.3" rx="2"/>`; // Yli/Ali
-
-  // Y-akselit tekstit
+  svg += `<rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH/3}" fill="#EAF3DE" opacity="0.3" rx="2"/>`;
+  svg += `<rect x="${padL}" y="${padT + plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDF3E3" opacity="0.3"/>`;
+  svg += `<rect x="${padL}" y="${padT + 2*plotH/3}" width="${plotW}" height="${plotH/3}" fill="#FDE8EE" opacity="0.3" rx="2"/>`;
   svg += `<text x="${padL-4}" y="${padT + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Opt.</text>`;
   svg += `<text x="${padL-4}" y="${padT + plotH/2 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Koh.</text>`;
   svg += `<text x="${padL-4}" y="${padT + plotH + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Yli</text>`;
 
-  // Trendi-viiva
   if (pisteet.length > 1) {
     let path = `M ${pisteet[0].x} ${pisteet[0].y}`;
     for (let i = 1; i < pisteet.length; i++) {
@@ -1876,18 +1908,14 @@ function piirraKehityskaavio(merkinnat) {
       const cpx = (p0.x + p1.x) / 2;
       path += ` C ${cpx} ${p0.y}, ${cpx} ${p1.y}, ${p1.x} ${p1.y}`;
     }
-    svg += `<path d="${path}" fill="none" stroke="#ddd" stroke-width="1.5" stroke-linecap="round"/>`;
-
-    // Värikäs viiva
+    svg += `<path d="${path}" fill="none" stroke="#eee" stroke-width="1.5" stroke-linecap="round"/>`;
     for (let i = 1; i < pisteet.length; i++) {
       const p0 = pisteet[i-1], p1 = pisteet[i];
       const cpx = (p0.x + p1.x) / 2;
-      const seg = `M ${p0.x} ${p0.y} C ${cpx} ${p0.y}, ${cpx} ${p1.y}, ${p1.x} ${p1.y}`;
-      svg += `<path d="${seg}" fill="none" stroke="${pVari(p1.arvo)}" stroke-width="2" stroke-linecap="round" opacity="0.7"/>`;
+      svg += `<path d="M ${p0.x} ${p0.y} C ${cpx} ${p0.y}, ${cpx} ${p1.y}, ${p1.x} ${p1.y}" fill="none" stroke="${pVari(p1.arvo)}" stroke-width="2" stroke-linecap="round" opacity="0.7"/>`;
     }
   }
 
-  // Pisteet
   pisteet.forEach((p, i) => {
     const onViimeisin = i === pisteet.length - 1;
     const r = onViimeisin ? 5 : 3;
@@ -1897,23 +1925,35 @@ function piirraKehityskaavio(merkinnat) {
     }
   });
 
-  // X-akseli: ensimmäinen ja viimeinen päivämäärä
-  const ekaPvm = new Date(data[0].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
-  const vikaPvm = new Date(data[data.length-1].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
-  svg += `<text x="${padL}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="middle" font-family="DM Sans,sans-serif">${ekaPvm}</text>`;
-  svg += `<text x="${W-padR}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="end" font-family="DM Sans,sans-serif">${vikaPvm}</text>`;
+  // Kuukausi-merkinnät x-akselille jos kaikki-näkymä
+  if (kaavioAikavali === 'kaikki' && data.length > 10) {
+    const kuukaudet = {};
+    data.forEach((m, i) => {
+      const d = new Date(m.aika);
+      const avain = d.getFullYear() + '-' + d.getMonth();
+      if (!kuukaudet[avain]) kuukaudet[avain] = { i, label: d.toLocaleDateString('fi-FI', { month:'short', year:'2-digit' }) };
+    });
+    Object.values(kuukaudet).forEach(k => {
+      const x = padL + (k.i / (data.length - 1)) * plotW;
+      svg += `<text x="${x}" y="${H - 4}" font-size="8" fill="#bbb" text-anchor="middle" font-family="DM Sans,sans-serif">${k.label}</text>`;
+      svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="#f0f0f0" stroke-width="1"/>`;
+    });
+  } else {
+    const ekaPvm = new Date(data[0].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
+    const vikaPvm = new Date(data[data.length-1].aika).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
+    svg += `<text x="${padL}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="middle" font-family="DM Sans,sans-serif">${ekaPvm}</text>`;
+    svg += `<text x="${W-padR}" y="${H-4}" font-size="8" fill="#bbb" text-anchor="end" font-family="DM Sans,sans-serif">${vikaPvm}</text>`;
+  }
 
-  // Trendi-nuoli ja teksti
-  const ensinArvo = pisteet.slice(0, 3).reduce((s,p) => s + p.arvo, 0) / 3;
-  const lopussaArvo = pisteet.slice(-3).reduce((s,p) => s + p.arvo, 0) / 3;
+  const ensinArvo = pisteet.slice(0, Math.min(3, pisteet.length)).reduce((s,p) => s + p.arvo, 0) / Math.min(3, pisteet.length);
+  const lopussaArvo = pisteet.slice(-Math.min(3, pisteet.length)).reduce((s,p) => s + p.arvo, 0) / Math.min(3, pisteet.length);
   const trendi = lopussaArvo - ensinArvo;
   const trendiTeksti = trendi > 0.3 ? '↑ Trendi kohti optimaalista' : trendi < -0.3 ? '↓ Trendi poispäin optimaalista' : '→ Tasainen vireystila';
   const trendiVari = trendi > 0.3 ? '#3B6D11' : trendi < -0.3 ? '#E24B4A' : '#888';
 
   svg += `</svg>`;
   svg += `<div style="font-size:11px;font-weight:500;color:${trendiVari};margin-top:6px;text-align:center">${trendiTeksti}</div>`;
-  svg += `<div style="font-size:10px;color:#ccc;text-align:center;margin-top:2px">Viimeiset ${data.length} merkintää</div>`;
-
+  svg += `<div style="font-size:10px;color:#ccc;text-align:center;margin-top:2px">${data.length} merkintää näkyvissä</div>`;
   div.innerHTML = svg;
 }
 
