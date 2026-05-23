@@ -159,6 +159,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn" onclick="showScreen('harjoitteet',this)">Harjoitteet</button>
     <button class="nav-btn" onclick="showScreen('aanitteet',this)">Äänitteet</button>
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
+    <button class="nav-btn" onclick="showScreen('ohje',this)">Ohje</button>
   </div>
 
   <!-- KIRJAA -->
@@ -538,6 +539,103 @@ textarea:focus{border-color:#bbb;background:#fff}
 
   </div>
   <!-- END POLKU SCREEN -->
+
+<!-- OHJE -->
+<div id="screen-ohje" class="screen">
+
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.75rem">Miten käytät kompassia</div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem">
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888">1</div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px">Kirjaa – tunnista tilasi</div>
+          <div style="font-size:12px;color:#777;line-height:1.6">Valitse kehon, mielen ja käyttäytymisen oireita jotka tunnistat juuri nyt. Merkitse vireystila janalle. Kirjoita halutessasi huomio. Tallenna merkintä.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888">2</div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px">Harjoitteet – sääntele tilaa</div>
+          <div style="font-size:12px;color:#777;line-height:1.6">Kompassi ehdottaa harjoitteita vireystilasi perusteella. Valitse harjoite, merkitse vireystila ennen ja jälkeen – näet konkreettisesti auttiko harjoitus.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888">3</div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px">Äänitteet – ohjattu harjoitus</div>
+          <div style="font-size:12px;color:#777;line-height:1.6">Kuuntele ohjattu äänite vireystilasi mukaan. Kuuntelusta jää merkintä omapolkuun automaattisesti.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888">4</div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px">Omapolku – seuraa kehitystä</div>
+          <div style="font-size:12px;color:#777;line-height:1.6">Omapolku kokoaa kaikki kirjauksesi, harjoituksesi ja kuuntelemasi äänitteet yhteen. Jokainen teko näkyy polulla. Joka 10. harjoituksesta saat merkinnän.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.75rem">Vireystilat</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#FAECE7">
+        <div style="width:10px;height:10px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#712B13">Ylivirittynyt</div>
+          <div style="font-size:11px;color:#993C1D;line-height:1.5">Hermosto hälytystilassa. Sympaattinen hermosto yliaktivoitunut. Tyypillistä: sydän hakkaa, ajatukset kiitävät, vaikea pysähtyä.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#FDF3E3">
+        <div style="width:10px;height:10px;border-radius:50%;background:#EF9F27;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#633806">Kohonnut</div>
+          <div style="font-size:11px;color:#854F0B;line-height:1.5">Hermosto valppaana, suunta ylöspäin. Levoton olo, lihasjännitys kasvaa, mieli aktiivinen.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#EAF3DE">
+        <div style="width:10px;height:10px;border-radius:50%;background:#639922;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#27500A">Optimaalinen toimintavyöhyke</div>
+          <div style="font-size:11px;color:#3B6D11;line-height:1.5">Sosiaalisen liittymisen tila. Vagushermo aktivoitunut. Läsnäolo helppoa, mieli selkeä, keho rento mutta valmis.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#E3EEF9">
+        <div style="width:10px;height:10px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#0C447C">Laskenut</div>
+          <div style="font-size:11px;color:#185FA5;line-height:1.5">Hermosto hidastuu. Keho pyytää lepoa tai aktivointia. Liikkeet ja ajatukset raskaita.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#EEEDFE">
+        <div style="width:10px;height:10px;border-radius:50%;background:#7F77DD;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#3C3489">Alivireystila</div>
+          <div style="font-size:11px;color:#534AB7;line-height:1.5">Jähmettyminen – vagushermon selän puoleinen haara aktivoitunut. Lamaannus, dissosiaatio, autopilotti.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.5rem">Tietoja</div>
+    <div style="font-size:12px;color:#777;line-height:1.6">Vireyskompassi on kehitetty tukemaan vireystilan tunnistamista ja säätelyä. Työkalu ei korvaa ammatillista tukea.<br><br>Kaikki tiedot tallentuvat vain omalle laitteellesi – ei pilvipalveluun.</div>
+  </div>
+
+</div>
+<!-- END OHJE -->
 
 <!-- PALKINTO-MODAALI -->
 <div id="palkinto-modaali" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center">
