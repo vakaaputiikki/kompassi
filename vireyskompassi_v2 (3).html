@@ -141,6 +141,11 @@ textarea:focus{border-color:#bbb;background:#fff}
 .vbar-lbl{font-size:10px;color:#aaa}
 .empty-note{font-size:13px;color:#aaa;padding:1.5rem 0;text-align:center}
 .palaute{font-size:12px;color:#888;margin-top:8px;min-height:18px}
+@keyframes tahti-pyori{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes tahti-pompi{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.tahti-anim{animation:tahti-pyori 1.2s ease-in-out, tahti-pompi 0.6s ease-in-out 1.2s 3}
+@keyframes luku-zoomaa{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.luku-anim{animation:luku-zoomaa 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards}
 </style>
 </head>
 <body>
@@ -153,8 +158,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn active" onclick="showScreen('kirjaa',this)">Kirjaa</button>
     <button class="nav-btn" onclick="showScreen('harjoitteet',this)">Harjoitteet</button>
     <button class="nav-btn" onclick="showScreen('aanitteet',this)">Äänitteet</button>
-    <button class="nav-btn" onclick="showScreen('viikko',this)">Viikko</button>
-    <button class="nav-btn" onclick="showScreen('polku',this)">Polku</button>
+    <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
   </div>
 
   <!-- KIRJAA -->
@@ -244,11 +248,10 @@ textarea:focus{border-color:#bbb;background:#fff}
       <div class="step-row"><span class="step-num">3</span><span class="step-title">Huomioita (vapaaehtoinen)</span></div>
       <textarea id="nota" placeholder="Mitä tapahtui ennen tätä tilaa? Mikä auttoi? Mitä huomasit..."></textarea>
     </div>
-    <button class="btn primary" onclick="tallenna()">&#10003; Tallenna merkintä</button>
+    <button class="btn primary" onclick="tallenna()" style="width:100%;margin-bottom:8px">&#10003; Tallenna merkintä</button>
     <div class="palaute" id="palaute"></div>
+    <button class="btn" id="jatka-harjoitteet-btn" onclick="siirrySeuraavaan('harjoitteet')" style="width:100%;display:none;margin-top:4px;border-color:#639922;color:#3B6D11">Jatka harjoitteisiin →</button>
   </div>
-
-  <!-- HARJOITTEET -->
   <div id="screen-harjoitteet" class="screen">
     <div class="card">
       <div id="h-zone-badge" style="margin-bottom:0.75rem"></div>
@@ -302,6 +305,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
     </div>
     <p style="font-size:12px;color:#aaa;margin-top:0.25rem">Harjoitteet perustuvat viimeksi kirjattuun vireystilaan.</p>
+    <button class="btn" onclick="siirrySeuraavaan('aanitteet')" style="width:100%;margin-top:1rem;border-color:#639922;color:#3B6D11">Jatka äänitteihin →</button>
   </div>
 
   <!-- ÄÄNITTEET -->
@@ -480,17 +484,11 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
     </div>
     <p style="font-size:11px;color:#ccc;margin-top:1rem;text-align:center">Kirjoittamasi huomiot tallentuvat vain omalle laitteellesi.</p>
+    <button class="btn" onclick="siirrySeuraavaan('polku')" style="width:100%;margin-top:1rem;border-color:#639922;color:#3B6D11">Katso omapolku →</button>
   </div>
 
-  <!-- VIIKKO -->
-  <div id="screen-viikko" class="screen">
-    <div class="card">
-      <p class="slabel">Viikkonäkymä</p>
-      <div class="viikko-chart" id="viikko-chart"></div>
-    </div>
-    <div id="merkinnat-lista"></div>
-    <button class="btn" style="margin-top:0.5rem" onclick="if(confirm('Poistetaanko kaikki merkinnät?')){try{localStorage.removeItem('vk1')}catch(e){}merkinnat=[];renderViikko();renderMerkinnat()}">Tyhjennä historia</button>
-    <!-- POLKU -->
+
+  <!-- POLKU -->
   <div id="screen-polku" class="screen">
 
     <!-- Tilastorivi -->
@@ -511,7 +509,7 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <!-- Aikajanapolku -->
     <div class="card" style="padding:1.25rem 1rem">
-      <div class="slabel" style="margin-bottom:1rem">Oma polku</div>
+      <div class="slabel" style="margin-bottom:1rem">Omapolku</div>
       <div id="polku-tyhjä" style="display:none;text-align:center;padding:2rem 0">
         <div style="font-size:32px;margin-bottom:0.5rem">🌱</div>
         <div style="font-size:13px;color:#aaa;line-height:1.6">Polkusi alkaa ensimmäisestä merkinnästä.<br>Siirry Kirjaa-välilehdelle ja aloita.</div>
@@ -521,6 +519,11 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <!-- Avoin päiväkortti -->
     <div id="polku-paivakortti" style="display:none"></div>
+
+    <!-- Reset-nappi -->
+    <div style="margin-top:1.5rem;text-align:center">
+      <button class="btn" onclick="nollaaOmapolku()" style="font-size:11px;color:#ccc;border-color:#eee">Tyhjennä omapolku</button>
+    </div>
 
     <!-- placeholder divs so old JS refs don't crash -->
     <div id="polku-taso-ikoni" style="display:none"></div>
@@ -535,6 +538,17 @@ textarea:focus{border-color:#bbb;background:#fff}
 
   </div>
   <!-- END POLKU SCREEN -->
+
+<!-- PALKINTO-MODAALI -->
+<div id="palkinto-modaali" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center">
+  <div id="palkinto-sisalto" style="background:#fff;border-radius:20px;padding:2.5rem 2rem;max-width:320px;width:90%;text-align:center;position:relative;transform:scale(0.8);opacity:0;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s">
+    <div id="palkinto-tahdet" style="font-size:40px;margin-bottom:1rem;line-height:1">✦</div>
+    <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Merkkipaalu saavutettu</div>
+    <div id="palkinto-luku" style="font-size:48px;font-weight:500;color:#1a1a1a;line-height:1;margin-bottom:0.25rem">10</div>
+    <div style="font-size:16px;color:#639922;font-weight:500;margin-bottom:1rem">askelta kuljettu</div>
+    <div id="palkinto-teksti" style="font-size:13px;color:#666;line-height:1.6;margin-bottom:1.5rem"></div>
+    <button onclick="sulkePalkinto()" style="width:100%;padding:12px;background:#1a1a1a;color:#fff;border:none;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500">Jatka matkaa →</button>
+  </div>
 </div>
 
 <script>
@@ -768,7 +782,6 @@ function showScreen(id,btn){
   document.getElementById('screen-'+id).classList.add('visible');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(id==='viikko'){renderViikko();renderMerkinnat();}
   if(id==='harjoitteet')renderHarjoitteet();
   if(id==='polku')renderPolku();
 }
@@ -829,6 +842,25 @@ track.addEventListener('touchstart',e=>{drag=true;setJana(getPct(e));},{passive:
 document.addEventListener('touchmove',e=>{if(drag)setJana(getPct(e));},{passive:true});
 document.addEventListener('touchend',()=>drag=false);
 
+function nollaaOmapolku() {
+  if (!confirm('Tämä poistaa kaikki kirjaukset, harjoitukset ja äänitetiedot omapolulta. Haluatko varmasti jatkaa?')) return;
+  try { localStorage.removeItem('vk1'); } catch(e) {}
+  try { localStorage.removeItem('vk_harj'); } catch(e) {}
+  try { localStorage.removeItem('vk_aanitteet'); } catch(e) {}
+  merkinnat = [];
+  harjoitukset = [];
+  avoinTekoIdx = null;
+  renderPolku();
+}
+
+function siirrySeuraavaan(kohde) {
+  const btn = document.querySelector(`.nav-btn[onclick*="'${kohde}'"]`);
+  if (btn) {
+    showScreen(kohde, btn);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
 function tallenna(){
   const nota=document.getElementById('nota').value.trim();
   // Kerää tänään soitetut äänitteet
@@ -841,7 +873,10 @@ function tallenna(){
   merkinnat.unshift({aika:new Date().toISOString(),zone:aktiivZone,janaArvo,oireet:[...valiturOireet],nota,aanitteet:aanitteetTanaan});
   if(merkinnat.length>200)merkinnat=merkinnat.slice(0,200);
   try{localStorage.setItem('vk1',JSON.stringify(merkinnat));}catch(e){}
+  // Päivitä polku heti jos se on auki
+  try { renderPolku(); } catch(e) {}
   document.getElementById('palaute').textContent='Merkintä tallennettu ✓';
+  document.getElementById('jatka-harjoitteet-btn').style.display='block';
   document.getElementById('nota').value='';
   valiturOireet=[];renderOireet();setJana(50);
   document.getElementById('ehdotus-wrap').innerHTML='';
@@ -909,6 +944,21 @@ function toggleAanite(key){
     });
     audio.play().catch(()=>{});
     aaniteStates[key].playing=true;btn.innerHTML='&#9646;&#9646;';
+    // Tallenna heti kun kuuntelu alkaa
+    const nimiElPlay=document.getElementById('an-'+key+'-nimi');
+    const nimiPlay=nimiElPlay?nimiElPlay.textContent:'Äänite '+key;
+    try{
+      const lista=JSON.parse(localStorage.getItem('vk_aanitteet')||'[]');
+      // Älä lisää duplikaattia saman päivän sisällä
+      const tanaan=new Date().toDateString();
+      const onJo=lista.some(a=>a.key===key&&new Date(a.aika).toDateString()===tanaan);
+      if(!onJo){
+        lista.unshift({aika:new Date().toISOString(),key,nimi:nimiPlay});
+        if(lista.length>200)lista.splice(200);
+        localStorage.setItem('vk_aanitteet',JSON.stringify(lista));
+        try{renderPolku();}catch(e){}
+      }
+    }catch(e){}
   }
 }
 function updateAanite(key){
@@ -945,6 +995,18 @@ function aaniteEnded(key){
     if(lista.length>200)lista.splice(200);
     localStorage.setItem('vk_aanitteet',JSON.stringify(lista));
   }catch(e){}
+  // Visuaalinen merkki: kortti saa vihreän reunan ja "Kuunneltu"-merkin
+  const kortti=btn?btn.closest('.aanite-card'):null;
+  if(kortti&&!kortti.querySelector('.kuunneltu-merkki')){
+    kortti.style.borderColor='#C0DD97';
+    kortti.style.background='#f7fbf2';
+    const merkki=document.createElement('div');
+    merkki.className='kuunneltu-merkki';
+    merkki.style.cssText='font-size:11px;color:#3B6D11;margin-top:6px;font-weight:500';
+    merkki.textContent='✓ Kuunneltu – tallentuu omapolkuun';
+    kortti.appendChild(merkki);
+  }
+  try { renderPolku(); } catch(e) {}
 }
 function fmtTime(s){
   if(isNaN(s)||s===Infinity)return'0:00';
@@ -1040,6 +1102,12 @@ function tallennaHarjoitusSeuranta() {
   harjoitukset.unshift(rec);
   if (harjoitukset.length > 300) harjoitukset = harjoitukset.slice(0, 300);
   try { localStorage.setItem('vk_harj', JSON.stringify(harjoitukset)); } catch(e) {}
+  // Päivitä polku heti jos se on auki
+  try { renderPolku(); } catch(e) {}
+  // Tarkista palkinto
+  if (harjoitukset.length % 10 === 0) {
+    setTimeout(() => naytaPalkinto(harjoitukset.length), 800);
+  }
 
   // Laske suunta kohti optimaalista (35-65 = ok-vyöhyke)
   const ennenEtaisyys = Math.abs(ennen - 50);
@@ -1082,11 +1150,11 @@ function zoneTaustaVari(zid) {
   return { yli:'#FDE8EE', kohonnut:'#FDF3E3', ok:'#E8F5E9', las:'#E3EEF9', ali:'#EEEDFE' }[zid] || '#f5f5f5';
 }
 
-let avoinPaivaKey = null;
-
 function renderPolku() {
   try { harjoitukset = JSON.parse(localStorage.getItem('vk_harj') || '[]'); } catch(e) {}
   try { merkinnat = JSON.parse(localStorage.getItem('vk1') || '[]'); } catch(e) {}
+  let aaniteHistoria = [];
+  try { aaniteHistoria = JSON.parse(localStorage.getItem('vk_aanitteet') || '[]'); } catch(e) {}
 
   // Tilastot
   const aktiivipaivatSet = new Set(merkinnat.map(m => new Date(m.aika).toDateString()));
@@ -1094,213 +1162,160 @@ function renderPolku() {
   document.getElementById('polku-stat-harjoitukset').textContent = harjoitukset.length;
   document.getElementById('polku-stat-paivat').textContent = aktiivipaivatSet.size;
 
-  if (merkinnat.length === 0) {
-    document.getElementById('polku-tyhjä').style.display = 'block';
-    document.getElementById('polku-aikajana').innerHTML = '';
-    document.getElementById('polku-paivakortti').style.display = 'none';
+  // Kerää kaikki teot, vanhimmasta uusimpaan
+  const teot = [];
+  merkinnat.forEach(m => teot.push({ tyyppi:'kirjaus', aika:m.aika, data:m }));
+  harjoitukset.forEach(h => teot.push({ tyyppi:'harjoite', aika:h.aika, data:h }));
+  aaniteHistoria.forEach(a => teot.push({ tyyppi:'aanite', aika:a.aika, data:a }));
+  teot.sort((a,b) => new Date(b.aika) - new Date(a.aika)); // uusin ensin
+
+  const aikajana = document.getElementById('polku-aikajana');
+  const tyhja = document.getElementById('polku-tyhjä');
+
+  if (teot.length === 0) {
+    tyhja.style.display = 'block';
+    aikajana.innerHTML = '';
     return;
   }
-  document.getElementById('polku-tyhjä').style.display = 'none';
+  tyhja.style.display = 'none';
 
-  // Ryhmittele merkinnät päivittäin
-  const paivaMap = {};
-  merkinnat.forEach(m => {
-    const key = new Date(m.aika).toDateString();
-    if (!paivaMap[key]) paivaMap[key] = { merkinnat: [], harjoitukset: [], aanitteet: [], key };
-    paivaMap[key].merkinnat.push(m);
-  });
-  harjoitukset.forEach(rec => {
-    const key = new Date(rec.aika).toDateString();
-    if (!paivaMap[key]) paivaMap[key] = { merkinnat: [], harjoitukset: [], aanitteet: [], key };
-    paivaMap[key].harjoitukset.push(rec);
-  });
-  // Lisää äänitteet päivälle
-  let aaniteHistoria = [];
-  try { aaniteHistoria = JSON.parse(localStorage.getItem('vk_aanitteet') || '[]'); } catch(e) {}
-  aaniteHistoria.forEach(a => {
-    const key = new Date(a.aika).toDateString();
-    if (!paivaMap[key]) paivaMap[key] = { merkinnat: [], harjoitukset: [], aanitteet: [], key };
-    // Vältä duplikaatit saman päivän sisällä
-    if (!paivaMap[key].aanitteet.find(x => x.nimi === a.nimi)) {
-      paivaMap[key].aanitteet.push(a);
-    }
-  });
+  // Palkinto joka 10. harjoite (lasketaan vanhimmasta)
+  const harjJarj = teot.filter(t => t.tyyppi === 'harjoite').reverse();
+  const palkintoAjat = new Set(harjJarj.filter((_,i) => (i+1) % 10 === 0).map(t => t.aika));
 
-  // Järjestä vanhimmasta uusimpaan (polku alhaalta ylös = DOM järjestyksessä vanhimmat ensin, uusin viimeinen)
-  const paivat = Object.values(paivaMap).sort((a,b) => new Date(a.key) - new Date(b.key));
+  aikajana.innerHTML = teot.map((t, idx) => {
+    const pvm = new Date(t.aika).toLocaleDateString('fi-FI', { weekday:'short', day:'numeric', month:'numeric' });
+    const klo = new Date(t.aika).toLocaleTimeString('fi-FI', { hour:'2-digit', minute:'2-digit' });
+    const onPalkinto = palkintoAjat.has(t.aika);
 
-  // Piirrä SVG-polku + pisteet
-  const svgW = 320;
-  const pistekorkeus = 72;
-  const svgH = paivat.length * pistekorkeus + 40;
-  const cx = svgW / 2;
+    if (t.tyyppi === 'kirjaus') {
+      const zid = t.data.zone || getZone(t.data.janaArvo || 50);
+      const vari = zoneVari(zid);
+      const tausta = zoneTaustaVari(zid);
+      const zdNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Optimaalinen', las:'Laskenut', ali:'Alivireystila' }[zid] || zid;
+      const oireet = t.data.oireet || [];
+      const nota = t.data.nota || '';
+      const avausId = 'teko-' + idx;
 
-  // Laske x-poikkeamat: vireystila vaikuttaa sivuttaisasemaan
-  // ok = keskellä, yli = vasemmalle, ali = oikealle → polku mutkittelee
-  function xOffset(zid) {
-    return { yli: -55, kohonnut: -28, ok: 0, las: 28, ali: 55 }[zid] || 0;
-  }
-
-  // Pisteiden y-koordinaatit: alin piste on ensimmäinen (vanhin), ylin on viimeisin
-  const pisteet = paivat.map((p, i) => {
-    const avgJana = Math.round(p.merkinnat.reduce((s,m) => s + m.janaArvo, 0) / p.merkinnat.length);
-    const zid = getZone(avgJana);
-    const y = svgH - 20 - i * pistekorkeus;
-    const x = cx + xOffset(zid);
-    return { ...p, avgJana, zid, x, y };
-  });
-
-  // Rakenna SVG
-  let svgHtml = `<svg viewBox="0 0 ${svgW} ${svgH}" width="100%" style="display:block;overflow:visible">`;
-
-  // Polkuviiva pisteiden välillä
-  if (pisteet.length > 1) {
-    let d = `M ${pisteet[0].x} ${pisteet[0].y}`;
-    for (let i = 1; i < pisteet.length; i++) {
-      const p0 = pisteet[i-1], p1 = pisteet[i];
-      const cy0 = p0.y - pistekorkeus * 0.4;
-      const cy1 = p1.y + pistekorkeus * 0.4;
-      d += ` C ${p0.x} ${cy0}, ${p1.x} ${cy1}, ${p1.x} ${p1.y}`;
-    }
-    svgHtml += `<path d="${d}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>`;
-    // Värikäs polkuviiva jos dataa
-    for (let i = 1; i < pisteet.length; i++) {
-      const p0 = pisteet[i-1], p1 = pisteet[i];
-      const cy0 = p0.y - pistekorkeus * 0.4;
-      const cy1 = p1.y + pistekorkeus * 0.4;
-      const seg = `M ${p0.x} ${p0.y} C ${p0.x} ${cy0}, ${p1.x} ${cy1}, ${p1.x} ${p1.y}`;
-      svgHtml += `<path d="${seg}" fill="none" stroke="${zoneVari(p1.zid)}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>`;
-    }
-  }
-
-  // Päiväpisteet
-  pisteet.forEach((p, i) => {
-    const vari = zoneVari(p.zid);
-    const tausta = zoneTaustaVari(p.zid);
-    const onAuki = avoinPaivaKey === p.key;
-    const pvm = new Date(p.key).toLocaleDateString('fi-FI', { day:'numeric', month:'numeric' });
-    const harjLkm = p.harjoitukset.length;
-    const r = onAuki ? 18 : 14;
-
-    // Piste
-    svgHtml += `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${tausta}" stroke="${vari}" stroke-width="${onAuki ? 3 : 2}" style="cursor:pointer" onclick="avaaPolkuPaiva('${p.key}')"/>`;
-
-    // Päivämäärä-teksti pisteen vasemmalla/oikealla puolella
-    const tekstiX = p.x > cx ? p.x - r - 6 : p.x + r + 6;
-    const anchor = p.x > cx ? 'end' : 'start';
-    svgHtml += `<text x="${tekstiX}" y="${p.y + 4}" font-size="11" fill="#aaa" text-anchor="${anchor}" font-family="DM Sans,sans-serif" style="pointer-events:none">${pvm}</text>`;
-
-    // Harjoitusmerkki jos on
-    if (harjLkm > 0) {
-      svgHtml += `<circle cx="${p.x + r - 3}" cy="${p.y - r + 3}" r="7" fill="#fff" stroke="${vari}" stroke-width="1.5" style="pointer-events:none"/>`;
-      svgHtml += `<text x="${p.x + r - 3}" y="${p.y - r + 7}" font-size="8" font-weight="600" fill="${vari}" text-anchor="middle" font-family="DM Sans,sans-serif" style="pointer-events:none">${harjLkm}</text>`;
-    }
-
-    // ZD-nimike lyhyesti
-    const zdNimet = { yli:'Yli', kohonnut:'Koh', ok:'OK', las:'Las', ali:'Ali' };
-    svgHtml += `<text x="${p.x}" y="${p.y + 4}" font-size="9" font-weight="500" fill="${vari}" text-anchor="middle" font-family="DM Sans,sans-serif" style="pointer-events:none">${zdNimet[p.zid]||''}</text>`;
-  });
-
-  // "Olet tässä" -merkki ylimmässä pisteessä
-  const ylin = pisteet[pisteet.length - 1];
-  if (ylin) {
-    svgHtml += `<text x="${ylin.x}" y="${ylin.y - 26}" font-size="10" fill="${zoneVari(ylin.zid)}" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="500">● Tässä nyt</text>`;
-  }
-
-  svgHtml += `</svg>`;
-  document.getElementById('polku-aikajana').innerHTML = svgHtml;
-
-  // Päivitä avoin kortti jos sellainen on
-  if (avoinPaivaKey) {
-    renderPaivaKortti(avoinPaivaKey, pisteet);
-  }
-}
-
-function avaaPolkuPaiva(key) {
-  avoinPaivaKey = avoinPaivaKey === key ? null : key;
-  renderPolku();
-  if (avoinPaivaKey) {
-    setTimeout(() => {
-      const kortti = document.getElementById('polku-paivakortti');
-      if (kortti) kortti.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 50);
-  }
-}
-
-function renderPaivaKortti(key, pisteet) {
-  const p = pisteet.find(x => x.key === key);
-  const kortti = document.getElementById('polku-paivakortti');
-  if (!p) { kortti.style.display = 'none'; return; }
-
-  const pvm = new Date(key).toLocaleDateString('fi-FI', { weekday:'long', day:'numeric', month:'long' });
-  const vari = zoneVari(p.zid);
-  const tausta = zoneTaustaVari(p.zid);
-  const z = ZD[p.zid] || ZD.ok;
-
-  // Oireet kaikista päivän merkinnöistä
-  const kaikkiOireet = [...new Set(p.merkinnat.flatMap(m => m.oireet || []))];
-
-  // Huomiot
-  const notat = p.merkinnat.filter(m => m.nota && m.nota.trim()).map(m => m.nota);
-
-  // Harjoitukset
-  const harjHtml = p.harjoitukset.length > 0
-    ? p.harjoitukset.map(rec => {
-        const ennenEt = Math.abs(rec.ennen - 50);
-        const jalkeenEt = Math.abs(rec.jalkeen - 50);
-        const diff = Math.round(ennenEt - jalkeenEt);
-        const ikoni = diff > 2 ? '▲' : diff < -2 ? '▼' : '→';
-        const harjVari = diff > 2 ? '#27500A' : diff < -2 ? '#712B13' : '#888';
-        return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5">
-          <span style="font-size:13px;color:#1a1a1a;flex:1">${rec.nimi}</span>
-          <span style="font-size:12px;font-weight:500;color:${harjVari}">${ikoni} ${diff > 2 ? 'auttoi' : diff < -2 ? 'ei auttanut' : 'neutraali'}</span>
-        </div>`;
-      }).join('')
-    : '<div style="font-size:12px;color:#ccc;padding:4px 0">Ei seurattuja harjoituksia</div>';
-
-  // Äänitteet
-  const aanitteet = p.aanitteet || [];
-  // Kerää myös merkintöihin tallennetut äänitteet
-  const aanitteetMerk = [...new Set(p.merkinnat.flatMap(m => m.aanitteet || []))];
-  const kaikkiAanitteet = [...new Set([...aanitteet.map(a => a.nimi), ...aanitteetMerk])];
-  const aaniteHtml = kaikkiAanitteet.length > 0
-    ? kaikkiAanitteet.map(nimi => `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f5f5">
-        <span style="font-size:16px">🎧</span>
-        <span style="font-size:12px;color:#1a1a1a">${nimi}</span>
-      </div>`).join('')
-    : '<div style="font-size:12px;color:#ccc;padding:4px 0">Ei kuunneltuja äänitteitä</div>';
-
-  kortti.style.display = 'block';
-  kortti.innerHTML = `
-    <div class="card" style="border-color:${vari};border-width:1.5px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-        <div>
-          <div style="font-size:11px;color:#aaa;text-transform:capitalize">${pvm}</div>
-          <div style="font-size:15px;font-weight:500;color:${vari}">${z.title}</div>
+      return `<div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:36px;height:36px;border-radius:50%;background:${tausta};border:2px solid ${vari};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:${vari};cursor:pointer;flex-shrink:0" onclick="toggleTekoKortti('${avausId}')">K</div>
+          <div style="width:1px;flex:1;background:#eee;margin-top:4px;min-height:8px"></div>
         </div>
-        <button onclick="avaaPolkuPaiva('${key}')" style="border:none;background:none;cursor:pointer;font-size:18px;color:#ccc;padding:4px">✕</button>
-      </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:#aaa;margin-bottom:3px">${pvm} · ${klo}</div>
+          <div id="${avausId}" style="background:${tausta};border:1px solid ${vari};border-radius:10px;padding:10px 12px;cursor:pointer" onclick="toggleTekoKortti('${avausId}')">
+            <div style="font-size:13px;font-weight:500;color:${vari};margin-bottom:${oireet.length||nota ? '8px':'0'}">${zdNimi}</div>
+            ${oireet.length > 0 ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${nota?'8px':'0'}">
+              ${oireet.map(o => `<span style="font-size:11px;padding:2px 8px;border-radius:12px;background:#fff;color:${vari};border:1px solid ${vari}40">${o}</span>`).join('')}
+            </div>` : ''}
+            ${nota ? `<div style="font-size:12px;color:#666;line-height:1.5;border-top:1px solid ${vari}20;padding-top:6px;margin-top:2px">${nota}</div>` : ''}
+          </div>
+          ${onPalkinto ? `<div style="font-size:11px;color:#BA7517;margin-top:4px">★ 10 harjoitusta saavutettu!</div>` : ''}
+        </div>
+      </div>`;
 
-      ${kaikkiOireet.length > 0 ? `
-        <div style="font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px">Huomatut oireet</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem">
-          ${kaikkiOireet.map(o => `<span style="padding:3px 9px;border-radius:6px;font-size:11px;background:${tausta};color:${vari}">${o}</span>`).join('')}
-        </div>` : ''}
+    } else if (t.tyyppi === 'harjoite') {
+      const ennenNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Optimaalinen', las:'Laskenut', ali:'Alivireystila' }[getZone(t.data.ennen||50)] || '';
+      const jalkeenNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Optimaalinen', las:'Laskenut', ali:'Alivireystila' }[getZone(t.data.jalkeen||50)] || '';
+      const ennenEt = Math.abs((t.data.ennen||50)-50);
+      const jalkeenEt = Math.abs((t.data.jalkeen||50)-50);
+      const diff = ennenEt - jalkeenEt;
+      const tulosMerkki = diff > 2 ? '✓' : diff < -2 ? '↓' : '→';
+      const tulosVari = diff > 2 ? '#27500A' : diff < -2 ? '#712B13' : '#888';
 
-      <div style="font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Harjoitukset</div>
-      ${harjHtml}
+      return `<div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:36px;height:36px;border-radius:50%;background:#EAF3DE;border:2px solid #639922;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#3B6D11;flex-shrink:0">H</div>
+          <div style="width:1px;flex:1;background:#eee;margin-top:4px;min-height:8px"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:#aaa;margin-bottom:3px">${pvm} · ${klo}</div>
+          <div style="background:#EAF3DE;border:1px solid #C0DD97;border-radius:10px;padding:10px 12px">
+            <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:5px">${t.data.nimi || 'Harjoite'}</div>
+            <div style="font-size:11px;color:#666">${ennenNimi} <span style="color:${tulosVari};font-weight:500">${tulosMerkki}</span> ${jalkeenNimi}</div>
+          </div>
+          ${onPalkinto ? `<div style="font-size:11px;color:#BA7517;margin-top:4px">★ 10 harjoitusta saavutettu!</div>` : ''}
+        </div>
+      </div>`;
 
-      <div style="font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.75rem;margin-bottom:4px">Äänitteet</div>
-      ${aaniteHtml}
-
-      ${notat.length > 0 ? `
-        <div style="font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.75rem;margin-bottom:4px">Omat huomiot</div>
-        ${notat.map(n => `<div style="font-size:12px;color:#666;line-height:1.5;padding:6px 8px;background:#fafafa;border-radius:6px;margin-bottom:4px">${n}</div>`).join('')}` : ''}
-    </div>`;
+    } else if (t.tyyppi === 'aanite') {
+      return `<div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:36px;height:36px;border-radius:50%;background:#EEEDFE;border:2px solid #7F77DD;display:flex;align-items:center;justify-content:center;font-size:13px;color:#534AB7;flex-shrink:0">♪</div>
+          <div style="width:1px;flex:1;background:#eee;margin-top:4px;min-height:8px"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:#aaa;margin-bottom:3px">${pvm} · ${klo}</div>
+          <div style="background:#EEEDFE;border:1px solid #AFA9EC;border-radius:10px;padding:10px 12px">
+            <div style="font-size:13px;font-weight:500;color:#534AB7">${t.data.nimi || 'Äänite'}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+    return '';
+  }).join('');
 }
 
+function toggleTekoKortti(id) {
+  // Kirjaukset ovat jo auki – tämä funktio on placeholder jos haluaa myöhemmin toggle-toiminnon
+}
+
+
+const palkintotekstit = {
+  10:  'Olet tehnyt 10 harjoitusta. Hermostosi on alkanut oppia – toisto rakentaa uusia polkuja.',
+  20:  'Kaksi kymmentä askelta. Keho muistaa mitä mieli unohtaa. Jatka.',
+  30:  'Kolmekymmentä kertaa olet pysähtynyt itsesi äärelle. Se on rohkeutta.',
+  40:  'Neljäkymmentä askelta kuljettu. Säätely ei ole tekniikka – se on tapa olla.',
+  50:  'Viisikymmentä harjoitusta. Olet rakentanut jotain pysyvää itseesi.',
+  60:  'Kuusikymmentä kertaa. Hermostosi kiittää sinua – vaikka et aina tunne sitä.',
+  70:  'Seitsemänkymmentä askelta. Matka jatkuu ja sinä jatkat sen mukana.',
+  80:  'Kahdeksankymmentä harjoitusta. Tämä on jo elämäntapa.',
+  90:  'Yhdeksänkymmentä askelta. Olet lähellä sataa – mutta matka ei lopu siihen.',
+  100: 'Sata harjoitusta. Tämä on merkittävä hetki. Keho ja mieli ovat oppineet yhdessä.',
+};
+
+function naytaPalkinto(lkm) {
+  const modaali = document.getElementById('palkinto-modaali');
+  const sisalto = document.getElementById('palkinto-sisalto');
+  const tahti = document.getElementById('palkinto-tahdet');
+  const luku = document.getElementById('palkinto-luku');
+  const teksti = document.getElementById('palkinto-teksti');
+
+  // Etsi lähimpään kymmeneen sopiva teksti
+  const avain = Math.floor(lkm / 10) * 10;
+  teksti.textContent = palkintotekstit[avain] || `Olet tehnyt ${lkm} harjoitusta. Jokainen askel vie eteenpäin.`;
+  luku.textContent = lkm;
+
+  modaali.style.display = 'flex';
+  // Animoi sisältö
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      sisalto.style.transform = 'scale(1)';
+      sisalto.style.opacity = '1';
+      tahti.classList.add('tahti-anim');
+      luku.classList.add('luku-anim');
+    });
+  });
+}
+
+function sulkePalkinto() {
+  const modaali = document.getElementById('palkinto-modaali');
+  const sisalto = document.getElementById('palkinto-sisalto');
+  const tahti = document.getElementById('palkinto-tahdet');
+  const luku = document.getElementById('palkinto-luku');
+  sisalto.style.transform = 'scale(0.9)';
+  sisalto.style.opacity = '0';
+  setTimeout(() => {
+    modaali.style.display = 'none';
+    sisalto.style.transform = 'scale(0.8)';
+    tahti.classList.remove('tahti-anim');
+    luku.classList.remove('luku-anim');
+  }, 250);
+}
 
 renderOireet();setJana(50);renderHarjoitteet();
 </script>
+<div style="text-align:center;padding:2rem 0 1.5rem;font-size:11px;color:#ccc">© Vakauttamisvalmentaja – Katja Saarinen</div>
 </body>
 </html>
