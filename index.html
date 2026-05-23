@@ -192,6 +192,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn" onclick="showScreen('aanitteet',this)">Äänitteet</button>
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
     <button class="nav-btn" onclick="showScreen('ohje',this)">Ohje</button>
+    <button class="nav-btn" onclick="showScreen('digivalmennus',this)">Digivalmennus</button>
   </div>
 
   <!-- KIRJAA -->
@@ -278,7 +279,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       </div>
     </div>
     <div class="card">
-      <div class="step-row"><span class="step-num">3</span><span class="step-title">Huomioita</span></div>
+      <div class="step-row"><span class="step-num">3</span><span class="step-title">Huomioita (vapaaehtoinen)</span></div>
       <textarea id="nota" placeholder="Mitä tapahtui ennen tätä tilaa? Mikä auttoi? Mitä huomasit..."></textarea>
     </div>
     <button class="btn primary" onclick="tallenna()" style="width:100%;margin-bottom:8px">&#10003; Tallenna merkintä</button>
@@ -679,6 +680,57 @@ textarea:focus{border-color:#bbb;background:#fff}
 
 </div>
 <!-- END OHJE -->
+
+<!-- DIGIVALMENNUS -->
+<div id="screen-digivalmennus" class="screen">
+
+  <!-- Salasanasuoja -->
+  <div id="digi-lukko" class="card" style="text-align:center;padding:2rem">
+    <div style="font-size:32px;margin-bottom:1rem">🔒</div>
+    <div style="font-size:15px;font-weight:500;color:#1a1a1a;margin-bottom:6px">Digivalmennus</div>
+    <div style="font-size:12px;color:#888;margin-bottom:1.5rem;line-height:1.6">Tämä osio on vain digivalmennukseen osallistuville.<br>Syötä saamasi salasana.</div>
+    <input id="digi-salasana" type="password" placeholder="Salasana" style="width:100%;padding:10px 14px;border:1px solid #eee;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:0.1em;margin-bottom:8px" onkeydown="if(event.key==='Enter')avaaDigivalmennus()">
+    <button class="btn primary" onclick="avaaDigivalmennus()" style="width:100%">Avaa →</button>
+    <div id="digi-virhe" style="font-size:12px;color:#E24B4A;margin-top:8px;min-height:18px"></div>
+  </div>
+
+  <!-- Sisältö salasanan jälkeen -->
+  <div id="digi-sisalto" style="display:none">
+
+    <div class="card">
+      <div class="slabel" style="margin-bottom:0.5rem">Oma valmentajasi</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
+        <div style="width:44px;height:44px;border-radius:50%;background:#EAF3DE;border:2px solid #C0DD97;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌱</div>
+        <div>
+          <div style="font-size:14px;font-weight:500;color:#1a1a1a">Katja Saarinen</div>
+          <div style="font-size:12px;color:#888">Vakauttamisvalmentaja</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#777;line-height:1.6">Voit lähettää minulle kysymyksiä tai ajatuksia digivalmennukseen liittyen. Pyrin vastaamaan saman päivän aikana.</div>
+    </div>
+
+    <div class="card">
+      <div class="slabel" style="margin-bottom:0.75rem">Lähetä viesti</div>
+      <div style="font-size:12px;color:#888;margin-bottom:0.75rem">Kirjoita kysymyksesi tai ajatuksesi. Viesti avautuu sähköpostiohjelmaasi valmiiksi muotoiltuna.</div>
+      <textarea id="digi-viesti" placeholder="Kirjoita tähän... Esim. 'Huomasin tänään että ylivireystilassa auttoi parhaiten...' tai 'Minulla on kysymys harjoitteeseen liittyen...'" style="width:100%;min-height:120px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none;margin-bottom:0.75rem"></textarea>
+      <div style="margin-bottom:0.75rem">
+        <div style="font-size:11px;color:#aaa;margin-bottom:4px">Nimesi (vapaaehtoinen)</div>
+        <input id="digi-nimi" type="text" placeholder="Etunimi" style="width:100%;padding:8px 12px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#fafafa">
+      </div>
+      <button class="btn primary" onclick="lahetaDigiViesti()" style="width:100%">Lähetä viesti →</button>
+      <div id="digi-palaute" style="font-size:12px;color:#3B6D11;margin-top:8px;min-height:18px;text-align:center"></div>
+    </div>
+
+    <div class="card">
+      <div class="slabel" style="margin-bottom:0.5rem">Muistio</div>
+      <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:0.75rem">Kirjaa tähän oivalluksia tai asioita joita haluat muistaa valmennuksesta. Tallentuu vain omalle laitteellesi.</div>
+      <textarea id="digi-muistio" placeholder="Oivalluksia, huomioita, kysymyksiä itselleni..." style="width:100%;min-height:100px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none;margin-bottom:0.75rem" oninput="tallennaMusitio()"></textarea>
+      <div style="font-size:11px;color:#ccc;text-align:right">Tallentuu automaattisesti</div>
+    </div>
+
+  </div>
+</div>
+<!-- END DIGIVALMENNUS -->
 
 <!-- PALKINTO-MODAALI -->
 <div id="palkinto-modaali" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center">
@@ -1454,6 +1506,77 @@ function sulkePalkinto() {
     tahti.classList.remove('tahti-anim');
     luku.classList.remove('luku-anim');
   }, 250);
+}
+
+// DIGIVALMENNUS
+function avaaDigivalmennus() {
+  const syote = document.getElementById('digi-salasana').value;
+  if (syote === 'digi2025') {
+    document.getElementById('digi-lukko').style.display = 'none';
+    document.getElementById('digi-sisalto').style.display = 'block';
+    localStorage.setItem('digi_auki', '1');
+    // Lataa muistio
+    const muistio = localStorage.getItem('digi_muistio') || '';
+    document.getElementById('digi-muistio').value = muistio;
+  } else {
+    document.getElementById('digi-virhe').textContent = 'Väärä salasana';
+    document.getElementById('digi-salasana').value = '';
+    document.getElementById('digi-salasana').focus();
+  }
+}
+
+function lahetaDigiViesti() {
+  const viesti = document.getElementById('digi-viesti').value.trim();
+  const nimi = document.getElementById('digi-nimi').value.trim();
+  if (!viesti) {
+    document.getElementById('digi-palaute').style.color = '#E24B4A';
+    document.getElementById('digi-palaute').textContent = 'Kirjoita viesti ennen lähettämistä.';
+    return;
+  }
+  // Hae omapolun yhteenveto
+  let polkuYhteenveto = '';
+  try {
+    const merkinnat = JSON.parse(localStorage.getItem('vk1') || '[]');
+    const harjoitukset = JSON.parse(localStorage.getItem('vk_harj') || '[]');
+    polkuYhteenveto = `\n\n--- Omapolku-yhteenveto ---\nMerkintöjä: ${merkinnat.length}\nHarjoituksia: ${harjoitukset.length}`;
+    if (merkinnat.length > 0) {
+      const viimeisin = merkinnat[0];
+      const zdNimi = {yli:'Ylivirittynyt',kohonnut:'Kohonnut',ok:'Optimaalinen',las:'Laskenut',ali:'Alivireystila'}[viimeisin.zone||'ok']||'';
+      polkuYhteenveto += `\nViimeisin vireystila: ${zdNimi}`;
+    }
+  } catch(e) {}
+
+  const aihe = encodeURIComponent('Digivalmennus' + (nimi ? ' – ' + nimi : ''));
+  const sisalto = encodeURIComponent(
+    (nimi ? 'Hei Katja,\n\nNimeni on ' + nimi + '.\n\n' : 'Hei Katja,\n\n') +
+    viesti +
+    polkuYhteenveto +
+    '\n\nTerveisin,\n' + (nimi || 'Digivalmennusasiakas')
+  );
+  window.location.href = `mailto:vakaaputiikki@gmail.com?subject=${aihe}&body=${sisalto}`;
+
+  document.getElementById('digi-palaute').style.color = '#3B6D11';
+  document.getElementById('digi-palaute').textContent = '✓ Sähköpostiohjelma avautuu – lähetä viesti sieltä.';
+  document.getElementById('digi-viesti').value = '';
+}
+
+function tallennaMusitio() {
+  const teksti = document.getElementById('digi-muistio').value;
+  localStorage.setItem('digi_muistio', teksti);
+}
+
+// Avaa automaattisesti jos salasana on jo syötetty aiemmin
+if (localStorage.getItem('digi_auki') === '1') {
+  setTimeout(() => {
+    const lukko = document.getElementById('digi-lukko');
+    const sisalto = document.getElementById('digi-sisalto');
+    if (lukko && sisalto) {
+      lukko.style.display = 'none';
+      sisalto.style.display = 'block';
+      const muistio = localStorage.getItem('digi_muistio') || '';
+      document.getElementById('digi-muistio').value = muistio;
+    }
+  }, 100);
 }
 
 // MUISTUTUKSET
