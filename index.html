@@ -187,7 +187,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <div class="header-sub">Tunnista vireystilasi ja löydä sopivat harjoitteet</div>
   </div>
   <div class="nav">
-    <button class="nav-btn active" onclick="showScreen('kirjaa',this)">Vireystilat</button>
+    <button class="nav-btn active" onclick="showScreen('kirjaa',this)">Kirjaa</button>
     <button class="nav-btn" onclick="showScreen('harjoitteet',this)">Harjoitteet</button>
     <button class="nav-btn" onclick="showScreen('aanitteet',this)">Äänitteet</button>
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
@@ -666,6 +666,17 @@ textarea:focus{border-color:#bbb;background:#fff}
     <div style="font-size:12px;color:#777;line-height:1.6">Vireyskompassi on kehitetty tukemaan vireystilan tunnistamista ja säätelyä. Työkalu ei korvaa ammatillista tukea.<br><br>Kaikki tiedot tallentuvat vain omalle laitteellesi – ei pilvipalveluun.</div>
   </div>
 
+  <div class="card">
+    <div class="slabel" style="margin-bottom:0.75rem">Muistutukset</div>
+    <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:1rem">Saat muistutuksen valittuun kellonaikaan jos et ole tehnyt merkintää päivän aikana.</div>
+    <div id="muistutus-tila" style="font-size:12px;color:#aaa;margin-bottom:1rem"></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+      <label style="font-size:13px;color:#1a1a1a">Muistutusaika:</label>
+      <input type="time" id="muistutus-aika" value="19:00" style="padding:6px 10px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none">
+    </div>
+    <button id="muistutus-nappi" class="btn primary" onclick="aktivoiMuistutus()" style="width:100%">Ota muistutukset käyttöön</button>
+  </div>
+
 </div>
 <!-- END OHJE -->
 
@@ -684,11 +695,11 @@ textarea:focus{border-color:#bbb;background:#fff}
 <script>
 const OIREET={
   keho:[
-    {t:'Sydän hakkaa / syke nousee',z:'yli'},{t:'Lihakset jännittyneet',z:'yli'},
-    {t:'Kehon säryt lisääntyvät',z:'yli'},{t:'Hengitys raskasta',z:'yli'},
-    {t:'Kädet hikoavat',z:'yli'},{t:'Vatsaa kiristää',z:'yli'},
-    {t:'Aistit herkillä',z:'yli'},{t:'Unettomuutta',z:'yli'},
-    {t:'Olo raskas tai väsynyt',z:'ali'},{t:'Liikkuminen vaivalloista',z:'ali'},
+    {t:'Sydän hakkaa / syke nousee',z:'yli'},{t:'Lihasjännitys',z:'yli'},
+    {t:'Kehon säryt lisääntyvät',z:'yli'},{t:'Hengitys tiukkaa',z:'yli'},
+    {t:'Kädet hikoavat',z:'yli'},{t:'Vatsa kiristää',z:'yli'},
+    {t:'Aistit herkillä',z:'yli'},{t:'Unettomuus',z:'yli'},
+    {t:'Olo painava tai väsynyt',z:'ali'},{t:'Liike vaivallloista',z:'ali'},
     {t:'Kädet tai jalat raskaat',z:'ali'},{t:'Voimakas väsymys',z:'ali'},
     {t:'Turtuneisuus',z:'ali'},{t:'Keho tuntuu etäiseltä',z:'jah'},
     {t:'Puutumisen tunne',z:'jah'},{t:'Keho rauhallinen',z:'ok'},
@@ -717,33 +728,33 @@ const OIREET={
 
 const KEH={
   yli:[
-    {n:'Pitkä uloshengitys',d:'Hengitä ulos 6–8 sekuntia. Hengitä nenän kautta jos vain mahdollista. Toista 5 kertaa. Aktivoi parasympaattisen hermoston.'},
-    {n:'Jalkojen painaminen lattiaan',d:'Tunne lattia jalkapohjien alla. Paina jalkapohjia lattiaan 10 sekunnin ajan ja sitten rentouta. Toista 3×.'},
-    {n:'Kylmä vesi kasvoille',d:'Roiski kylmää vettä kasvoille tai pidä ranteita kylmässä vedessä. Tai voit laittaa jääkylmällä vedellä kastellun pyyhkeen niskaan tai kasvojen päälle. Pidä noin 20 sekuntia.'},
-    {n:'5-4-3-2-1 aistit',d:'Kuvaile 5 näkemääsi, kuvaile 4 kuulemaasi, kuvaile 3 asiaa jota voit kosketettaa, kuvaile 2 jota voit haistella sekö 1 jota voit maistettava.'},
+    {n:'Pitkä uloshengitys',d:'Hengitä ulos 6–8 s. Toista 5 kertaa. Aktivoi parasympaattisen hermoston.'},
+    {n:'Jalojen painaminen lattiaan',d:'Tunne lattia jalkapohjien alla. Paina 10 s ja rentouta. Toista 3×.'},
+    {n:'Kylmä vesi kasvoille',d:'Roiski kylmää vettä kasvoille tai pidä ranteita kylmässä vedessä 20 s.'},
+    {n:'5-4-3-2-1 aistit',d:'5 näkemääsi, 4 kuulemaasi, 3 kosketettavaa, 2 haistettavaa, 1 maistettava.'},
     {n:'Hartioiden pudottaminen',d:'Nosta hartiat korviin, pidä 3 s, pudota. Toista 5×.'},
     {n:'Käsien puristaminen nyrkkiin',d:'Purista nyrkit tiukalle 5 s, avaa hitaasti. Toista 4×.'},
     {n:'Hidas kävely huoneessa',d:'Kävele todella hitaasti, askel kerrallaan. Kiinnitä huomio jokaiseen askeleeseen.'},
-    {n:'Leuan rentouttaminen',d:'Sulje silmät, laske leuka rennoksi, anna hampaiden erkaantua. Pidä 30 s.'},
-    {n:'Silmien painaminen kiinni',d:'Peitä silmät kämmenillä pehmeästi ja pidä näin 1 min. Aistien rauhoittaminen voi rauhoittaa myös hermostoa'},
-    {n:'Niskan hidas ja tietoinen kierto',d:'Kierrä pää hitaasti oikealle, alas, vasemmalle. Muista hengittää. Monesti me pidätämme hengitystä kun me keskitytään harjoitteeseen. 3 kierrosta.'},
-    {n:'Ääneen huokaus',d:'Huokaise ääneen ulos, anna äänen tulla vapaasti. Toista 5×.'},
-    {n:'Käsien hierominen',d:'Hiero kämmeniä vastakkain yhteen hitaasti ja tietoisesti. Muista hengittää nene kautta ulos ja sisään 30 s.'},
-    {n:'Istu lattialle',d:'Istu lattialle jalat ristissä tai makaa selällään. Tunne koko kehoa. Koko keho päästä varpaisiin. Palauta kehotietoisuus ilman arvottamista.'},
+    {n:'Leuan rentouttaminen',d:'Sulje silmät, laske leuka löysäksi, anna hampaiden erkaantua. Pidä 30 s.'},
+    {n:'Silmien painaminen kiinni',d:'Peitä silmät kämmeniä vasten ilman painetta 1 min.'},
+    {n:'Niskan hidas kierto',d:'Kierrä pää hitaasti oikealle, alas, vasemmalle. Hengitä ulos alhaalla. 3 kierrosta.'},
+    {n:'Äänellinen huokaus',d:'Huokaise ääneen ulos, anna äänen tulla vapaasti. Toista 5×.'},
+    {n:'Käsien hierominen',d:'Hiero kämmeniä vastakkain hitaasti 30 s.'},
+    {n:'Istu maahan',d:'Istu lattialle ristiin tai selälle. Matala tila viestittää turvallisuudesta.'},
     {n:'Hidas laskeminen',d:'Laske hitaasti mielessä 20:stä 1:een. Vie ajatus pois kierteestä.'},
-    {n:'Pudotus ja heilautus',d:'Seiso suorassa. Nosta kädet ylös suoraksi. Heilauta yläkehoa rennosti kohti lattiaa. Kevennä polvista.'}
+    {n:'Selälle venyttely',d:'Istu reunalla, anna ylävartalon roikkua eteenpäin 30 s.'}
   ],
   kohonnut:[
     {n:'Fysiologinen huokaus',d:'Kaksi nopeaa sisäänhengitystä nenästä, sitten hidas pitkä ulos suusta.'},
     {n:'Hartioiden laskeminen',d:'Laske hartiat tietoisesti 5× hengityksen tahdissa.'},
-    {n:'4-4-6 hengitys',d:'Hengitä sisään laskien neljään, pidätä hengitystä laskien neljään, hengitä ulos laskien kuuteen. Pidempi uloshengitys rauhoittaa.'},
+    {n:'4-4-6 hengitys',d:'Sisään 4 s, pidätä 4 s, ulos 6 s. Pidempi uloshengitys rauhoittaa.'},
     {n:'Venyttely seisten',d:'Nosta kädet ylös, venytä kylkiä vuorotellen. 5× per puoli.'},
     {n:'Kylmä vesi ranteille',d:'Pidä ranteita kylmässä vedessä 20 s.'},
-    {n:'Leuan rentouttaminen',d:'Laske leuka rennoksi, anna hampaiden erkaantua.'},
+    {n:'Leuan rentouttaminen',d:'Laske leuka löysäksi, anna hampaiden erkaantua.'},
     {n:'Silmien sulkeminen 1 min',d:'Sulje silmät, hengitä rauhallisesti.'},
     {n:'Niska-hartiahieronta',d:'Hiero niskan sivuja ja hartioita 2 min.'},
-    {n:'Tietoinen juominen',d:'Juo lasi kylmää vettä hitaasti, huomio jokaisessa siemauksessa.'},
-    {n:'Hidas kävely',d:'5 min rauhallinen kävely, huomio jalkapohjissa. Muista hengittää ja ole tietoinen, tuomitsemattoman tietoinen.'},
+    {n:'Tietoinen juominen',d:'Juo lasi vettä hitaasti, huomio jokaisessa siemauksessa.'},
+    {n:'Hidas kävely',d:'5 min rauhallinen kävely, huomio jalkapohjissa.'},
     {n:'Käsien hierominen',d:'Hiero kämmeniä vastakkain hitaasti 30 s.'},
     {n:'Huokaus seisten',d:'Nouse seisomaan, huokaise ääneen, ravista käsiä löysästi.'}
   ],
@@ -800,9 +811,9 @@ const KEH={
 const PILARIT={
   yli:[
     {n:'Liikkuminen',tip:'Lyhyt rauhallinen kävely. Ei suorittamista.',miksi:'Liike purkaa stressihormoneja lihaksista. Keho on valmistautunut toimintaan — liike antaa sille ulostulon.'},
-    {n:'Nesteytys',tip:'Muista juoda vettä! Aloita aamu lasillisella vettä.',miksi:'Kuivuminen vahvistaa stressireaktiota. Kortisolin eritys lisääntyy jo lievässä nestehukassa.'},
-    {n:'Uni',tip:'Ylikuormittuminen ja univaje ruokkivat toisiaan. Panosta unihigieniaan. 1-2 tuntia ennen nukkumaan menoa valoja vähemmäksi ja sosiaalista mediaa rajoitetusti!',miksi:'Unen aikana hermosto prosessoi päivän kuormituksen.'},
-    {n:'Sosiaalinen kontakti',tip:'Lyhyt yhteys turvalliseen ihmiseen. Pidä yhteyttä kaveriin, ystävään tai tuttavaan. Jos sinulla ei ole kavereita niin liity vapaaehtoistyöhön tai johonkin jossa voit tavata muita ihmisiä.',miksi:'Turvallinen ihmiskontakti vapauttaa oksitosiinia. Se on nopein biologinen stressinsäätelijä.'}
+    {n:'Nesteytys',tip:'Juo lasi vettä hitaasti.',miksi:'Kuivuminen vahvistaa stressireaktiota. Kortisolin eritys lisääntyy jo lievässä nestehukassa.'},
+    {n:'Uni',tip:'Ylikuormittuminen ja univaje ruokkivat toisiaan.',miksi:'Unen aikana hermosto prosessoi päivän kuormituksen.'},
+    {n:'Sosiaalinen kontakti',tip:'Lyhyt yhteys turvalliseen ihmiseen.',miksi:'Turvallinen ihmiskontakti vapauttaa oksitosiinia. Se on nopein biologinen stressinsäätelijä.'}
   ],
   kohonnut:[
     {n:'Uni',tip:'Kohonnut vireystila on usein merkki liian vähäisestä unesta.',miksi:'Univelka kertyy hiljaa. Jo 6 h uni sen sijaan 8 h heikentää stressinsietokykyä mitattavasti viikossa.'},
@@ -914,6 +925,7 @@ function showScreen(id,btn){
   btn.classList.add('active');
   if(id==='harjoitteet')renderHarjoitteet();
   if(id==='polku')renderPolku();
+  if(id==='ohje')setTimeout(paivitaMuistutusTila, 50);
 }
 
 function renderOireet(){
@@ -1444,7 +1456,91 @@ function sulkePalkinto() {
   }, 250);
 }
 
+// MUISTUTUKSET
+function paivitaMuistutusTila() {
+  const lupa = localStorage.getItem('muistutus_lupa');
+  const aika = localStorage.getItem('muistutus_aika') || '19:00';
+  const tila = document.getElementById('muistutus-tila');
+  const nappi = document.getElementById('muistutus-nappi');
+  const aikaInput = document.getElementById('muistutus-aika');
+  if (!tila || !nappi) return;
+  aikaInput.value = aika;
+  if (lupa === 'granted') {
+    tila.textContent = '✓ Muistutukset käytössä – ' + aika;
+    tila.style.color = '#3B6D11';
+    nappi.textContent = 'Muuta aikaa';
+    nappi.className = 'btn';
+  } else if (lupa === 'denied') {
+    tila.textContent = 'Selain on estänyt ilmoitukset. Salli ne selaimen asetuksista.';
+    tila.style.color = '#E24B4A';
+    nappi.textContent = 'Yritä uudelleen';
+    nappi.className = 'btn primary';
+  } else {
+    tila.textContent = 'Muistutukset eivät ole käytössä.';
+    tila.style.color = '#aaa';
+    nappi.textContent = 'Ota muistutukset käyttöön';
+    nappi.className = 'btn primary';
+  }
+}
+
+async function aktivoiMuistutus() {
+  const aika = document.getElementById('muistutus-aika').value || '19:00';
+  localStorage.setItem('muistutus_aika', aika);
+
+  if (!('Notification' in window)) {
+    alert('Selaimesi ei tue ilmoituksia. Kokeile Chrome- tai Edge-selaimella.');
+    return;
+  }
+
+  const lupa = await Notification.requestPermission();
+  localStorage.setItem('muistutus_lupa', lupa);
+
+  if (lupa === 'granted') {
+    asetaMuistutusAjastin();
+    paivitaMuistutusTila();
+  } else {
+    paivitaMuistutusTila();
+  }
+}
+
+function asetaMuistutusAjastin() {
+  const aika = localStorage.getItem('muistutus_aika') || '19:00';
+  const [tunnit, minuutit] = aika.split(':').map(Number);
+  const nyt = new Date();
+  const kohde = new Date();
+  kohde.setHours(tunnit, minuutit, 0, 0);
+  if (kohde <= nyt) kohde.setDate(kohde.getDate() + 1);
+  const viive = kohde - nyt;
+
+  setTimeout(() => {
+    tarkistaTarvitaankoMuistutus();
+    // Aseta seuraava päivä
+    setInterval(() => tarkistaTarvitaankoMuistutus(), 24 * 60 * 60 * 1000);
+  }, viive);
+}
+
+function tarkistaTarvitaankoMuistutus() {
+  if (Notification.permission !== 'granted') return;
+  try {
+    const merkinnat = JSON.parse(localStorage.getItem('vk1') || '[]');
+    const tanaan = new Date().toDateString();
+    const onTanaan = merkinnat.some(m => new Date(m.aika).toDateString() === tanaan);
+    if (!onTanaan) {
+      new Notification('Vireyskompassi', {
+        body: 'Muistitko kirjata vireystilasi tänään? Pysähdy hetkeksi itsesi äärelle. 🌱',
+        icon: 'https://vakaaputiikki.github.io/kompassi/favicon.ico'
+      });
+    }
+  } catch(e) {}
+}
+
+// Käynnistä ajastin jos lupa on jo annettu
+if (localStorage.getItem('muistutus_lupa') === 'granted') {
+  asetaMuistutusAjastin();
+}
+
 renderOireet();setJana(50);renderHarjoitteet();
+setTimeout(paivitaMuistutusTila, 100);
 </script>
 <div style="text-align:center;padding:2rem 0 1.5rem;font-size:11px;color:#ccc">© Vakauttamisvalmentaja – Katja Saarinen</div>
 </body>
