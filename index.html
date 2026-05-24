@@ -197,7 +197,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="nav-btn" onclick="showScreen('videot',this)">Videot</button>
     <button class="nav-btn" onclick="showScreen('polku',this)">Omapolku</button>
     <button class="nav-btn" onclick="showScreen('ohje',this)">Ohje</button>
-    <button class="nav-btn" onclick="showScreen('digivalmennus',this)">Digivalmennus</button>
+
   </div>
 
   <!-- Kiinteät napit -->
@@ -949,7 +949,6 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div style="font-size:13px;color:#aaa;line-height:1.6">Polkusi alkaa ensimmäisestä merkinnästä.<br>Siirry Kirjaa-välilehdelle ja aloita.</div>
       </div>
       <div id="polku-aikajana"></div>
-      <div id="polku-viikkonavigointi"></div>
     </div>
 
     <!-- Avoin päiväkortti -->
@@ -1185,56 +1184,7 @@ textarea:focus{border-color:#bbb;background:#fff}
 </div>
 <!-- END SOS -->
 
-<!-- DIGIVALMENNUS -->
-<div id="screen-digivalmennus" class="screen">
 
-  <!-- Salasanasuoja -->
-  <div id="digi-lukko" class="card" style="text-align:center;padding:2rem">
-    <div style="font-size:32px;margin-bottom:1rem">🔒</div>
-    <div style="font-size:15px;font-weight:500;color:#1a1a1a;margin-bottom:6px">Digivalmennus</div>
-    <div style="font-size:12px;color:#888;margin-bottom:1.5rem;line-height:1.6">Tämä osio on vain digivalmennukseen osallistuville.<br>Syötä saamasi salasana.</div>
-    <input id="digi-salasana" type="password" placeholder="Salasana" style="width:100%;padding:10px 14px;border:1px solid #eee;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:0.1em;margin-bottom:8px" onkeydown="if(event.key==='Enter')avaaDigivalmennus()">
-    <button class="btn primary" onclick="avaaDigivalmennus()" style="width:100%">Avaa →</button>
-    <div id="digi-virhe" style="font-size:12px;color:#E24B4A;margin-top:8px;min-height:18px"></div>
-  </div>
-
-  <!-- Sisältö salasanan jälkeen -->
-  <div id="digi-sisalto" style="display:none">
-
-    <div class="card">
-      <div class="slabel" style="margin-bottom:0.5rem">Oma valmentajasi</div>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
-        <div style="width:44px;height:44px;border-radius:50%;background:#EAF3DE;border:2px solid #C0DD97;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌱</div>
-        <div>
-          <div style="font-size:14px;font-weight:500;color:#1a1a1a">Katja Saarinen</div>
-          <div style="font-size:12px;color:#888">Vakauttamisvalmentaja</div>
-        </div>
-      </div>
-      <div style="font-size:12px;color:#777;line-height:1.6">Voit lähettää minulle kysymyksiä tai ajatuksia digivalmennukseen liittyen. Pyrin vastaamaan saman päivän aikana.</div>
-    </div>
-
-    <div class="card">
-      <div class="slabel" style="margin-bottom:0.75rem">Lähetä viesti</div>
-      <div style="font-size:12px;color:#888;margin-bottom:0.75rem">Kirjoita kysymyksesi tai ajatuksesi. Viesti avautuu sähköpostiohjelmaasi valmiiksi muotoiltuna.</div>
-      <textarea id="digi-viesti" placeholder="Kirjoita tähän... Esim. 'Huomasin tänään että ylivireystilassa auttoi parhaiten...' tai 'Minulla on kysymys harjoitteeseen liittyen...'" style="width:100%;min-height:120px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none;margin-bottom:0.75rem"></textarea>
-      <div style="margin-bottom:0.75rem">
-        <div style="font-size:11px;color:#aaa;margin-bottom:4px">Nimesi (vapaaehtoinen)</div>
-        <input id="digi-nimi" type="text" placeholder="Etunimi" style="width:100%;padding:8px 12px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#fafafa">
-      </div>
-      <button class="btn primary" onclick="lahetaDigiViesti()" style="width:100%">Lähetä viesti →</button>
-      <div id="digi-palaute" style="font-size:12px;color:#3B6D11;margin-top:8px;min-height:18px;text-align:center"></div>
-    </div>
-
-    <div class="card">
-      <div class="slabel" style="margin-bottom:0.5rem">Muistio</div>
-      <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:0.75rem">Kirjaa tähän oivalluksia tai asioita joita haluat muistaa valmennuksesta. Tallentuu vain omalle laitteellesi.</div>
-      <textarea id="digi-muistio" placeholder="Oivalluksia, huomioita, kysymyksiä itselleni..." style="width:100%;min-height:100px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none;margin-bottom:0.75rem" oninput="tallennaMusitio()"></textarea>
-      <div style="font-size:11px;color:#ccc;text-align:right">Tallentuu automaattisesti</div>
-    </div>
-
-  </div>
-</div>
-<!-- END DIGIVALMENNUS -->
 
 <!-- PALKINTO-MODAALI -->
 <div id="palkinto-modaali" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center">
@@ -1519,7 +1469,7 @@ function showScreen(id,btn){
     }
     renderHarjoitteet();
   }
-  if(id==='polku'){polkuViikkoOffset=0;renderPolku();}
+  if(id==='polku')renderPolku();
   if(id==='ohje')setTimeout(paivitaMuistutusTila, 50);
   if(id==='sos')alustaSos();
 }
@@ -1888,9 +1838,6 @@ function uusiHarjoitusSeuranta() {
 
 // ===== POLKU / AIKAJANA =====
 
-// Viikkonavigointi: 0 = nykyinen viikko, -1 = edellinen, jne.
-let polkuViikkoOffset = 0;
-
 // Värikartta vireystilan mukaan
 function zoneVari(zid) {
   return { yli:'#E24B4A', kohonnut:'#EF9F27', ok:'#639922', las:'#378ADD', ali:'#7F77DD' }[zid] || '#aaa';
@@ -1905,7 +1852,7 @@ function renderPolku() {
   let aaniteHistoria = [];
   try { aaniteHistoria = JSON.parse(localStorage.getItem('vk_aanitteet') || '[]'); } catch(e) {}
 
-  // Tilastot (kaikki aikavälit)
+  // Tilastot
   const aktiivipaivatSet = new Set(merkinnat.map(m => new Date(m.aika).toDateString()));
   document.getElementById('polku-stat-merkinnat').textContent = merkinnat.length;
   document.getElementById('polku-stat-harjoitukset').textContent = harjoitukset.length;
@@ -1916,53 +1863,26 @@ function renderPolku() {
   // KEHITYSKAAVIO
   piirraKehityskaavio(merkinnat);
 
-  // Kerää KAIKKI teot (palkinnot lasketaan kaikista)
-  const kaikki = [];
-  merkinnat.forEach(m => kaikki.push({ tyyppi:'kirjaus', aika:m.aika, data:m }));
-  harjoitukset.forEach(h => kaikki.push({ tyyppi:'harjoite', aika:h.aika, data:h }));
-  aaniteHistoria.forEach(a => kaikki.push({ tyyppi:'aanite', aika:a.aika, data:a }));
+  // Kerää kaikki teot, vanhimmasta uusimpaan
+  const teot = [];
+  merkinnat.forEach(m => teot.push({ tyyppi:'kirjaus', aika:m.aika, data:m }));
+  harjoitukset.forEach(h => teot.push({ tyyppi:'harjoite', aika:h.aika, data:h }));
+  aaniteHistoria.forEach(a => teot.push({ tyyppi:'aanite', aika:a.aika, data:a }));
+  teot.sort((a,b) => new Date(b.aika) - new Date(a.aika)); // uusin ensin
 
   const aikajana = document.getElementById('polku-aikajana');
   const tyhja = document.getElementById('polku-tyhjä');
 
-  if (kaikki.length === 0) {
+  if (teot.length === 0) {
     tyhja.style.display = 'block';
     aikajana.innerHTML = '';
-    renderViikkoNavigointi(null, null, kaikki);
     return;
   }
   tyhja.style.display = 'none';
 
-  // Laske viikon rajat (polkuViikkoOffset = 0 → tämä viikko)
-  const nyt = new Date();
-  const viikonAlku = new Date(nyt);
-  // Siirrytään maanantaille
-  const paiva = viikonAlku.getDay(); // 0=su, 1=ma...
-  const diffMa = (paiva === 0) ? -6 : 1 - paiva;
-  viikonAlku.setDate(viikonAlku.getDate() + diffMa + polkuViikkoOffset * 7);
-  viikonAlku.setHours(0,0,0,0);
-  const viikonLoppu = new Date(viikonAlku);
-  viikonLoppu.setDate(viikonAlku.getDate() + 6);
-  viikonLoppu.setHours(23,59,59,999);
-
-  // Suodata tämän viikon teot
-  const teot = kaikki.filter(t => {
-    const d = new Date(t.aika);
-    return d >= viikonAlku && d <= viikonLoppu;
-  });
-  teot.sort((a,b) => new Date(b.aika) - new Date(a.aika)); // uusin ensin
-
-  // Palkinto joka 10. harjoite (lasketaan kaikista, ei vain viikon)
-  const harjKaikki = kaikki.filter(t => t.tyyppi === 'harjoite').sort((a,b) => new Date(a.aika)-new Date(b.aika));
-  const palkintoAjat = new Set(harjKaikki.filter((_,i) => (i+1) % 10 === 0).map(t => t.aika));
-
-  // Onko tehtyjä muilla viikoilla → navigointi
-  renderViikkoNavigointi(viikonAlku, viikonLoppu, kaikki);
-
-  if (teot.length === 0) {
-    aikajana.innerHTML = `<div style="text-align:center;padding:2rem 0;font-size:13px;color:#aaa">Ei merkintöjä tällä viikolla.</div>`;
-    return;
-  }
+  // Palkinto joka 10. harjoite (lasketaan vanhimmasta)
+  const harjJarj = teot.filter(t => t.tyyppi === 'harjoite').reverse();
+  const palkintoAjat = new Set(harjJarj.filter((_,i) => (i+1) % 10 === 0).map(t => t.aika));
 
   aikajana.innerHTML = teot.map((t, idx) => {
     const pvm = new Date(t.aika).toLocaleDateString('fi-FI', { weekday:'short', day:'numeric', month:'numeric' });
@@ -2040,54 +1960,6 @@ function renderPolku() {
 
 function toggleTekoKortti(id) {
   // Kirjaukset ovat jo auki – tämä funktio on placeholder jos haluaa myöhemmin toggle-toiminnon
-}
-
-function renderViikkoNavigointi(viikonAlku, viikonLoppu, kaikki) {
-  const el = document.getElementById('polku-viikkonavigointi');
-  if (!el) return;
-
-  if (!viikonAlku || kaikki.length === 0) {
-    el.innerHTML = '';
-    return;
-  }
-
-  // Onko vanhempia tietoja? (teko ennen viikon alkua)
-  const onVanhempia = kaikki.some(t => new Date(t.aika) < viikonAlku);
-  // Onko uudempia? (offset < 0)
-  const onUudempia = polkuViikkoOffset < 0;
-
-  // Viikon otsikko
-  const nyt = new Date();
-  const tanaanMaanantai = new Date(nyt);
-  const d = tanaanMaanantai.getDay();
-  tanaanMaanantai.setDate(tanaanMaanantai.getDate() + ((d===0)?-6:1-d));
-  tanaanMaanantai.setHours(0,0,0,0);
-
-  let otsikko;
-  if (polkuViikkoOffset === 0) {
-    otsikko = 'Tämä viikko';
-  } else if (polkuViikkoOffset === -1) {
-    otsikko = 'Edellinen viikko';
-  } else {
-    const alku = viikonAlku.toLocaleDateString('fi-FI', {day:'numeric',month:'numeric'});
-    const loppu = viikonLoppu.toLocaleDateString('fi-FI', {day:'numeric',month:'numeric'});
-    otsikko = alku + '–' + loppu;
-  }
-
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:1rem;padding-top:0.75rem;border-top:1px solid #eee">
-      <button onclick="siirryViikko(-1)" style="padding:7px 14px;border:1px solid #eee;border-radius:8px;background:#fafafa;font-size:12px;color:${onVanhempia?'#1a1a1a':'#ccc'};cursor:${onVanhempia?'pointer':'default'};font-family:'DM Sans',sans-serif;transition:all 0.12s" ${onVanhempia?'':'disabled'}>← Edellinen</button>
-      <div style="font-size:12px;color:#888;font-weight:500;text-align:center">${otsikko}</div>
-      <button onclick="siirryViikko(1)" style="padding:7px 14px;border:1px solid #eee;border-radius:8px;background:#fafafa;font-size:12px;color:${onUudempia?'#1a1a1a':'#ccc'};cursor:${onUudempia?'pointer':'default'};font-family:'DM Sans',sans-serif;transition:all 0.12s" ${onUudempia?'':'disabled'}>Seuraava →</button>
-    </div>`;
-}
-
-function siirryViikko(suunta) {
-  polkuViikkoOffset += suunta;
-  renderPolku();
-  // Scrollaa polku-kortti alkuun
-  const kortti = document.querySelector('#screen-polku .card:last-of-type');
-  if (kortti) kortti.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 
@@ -2588,77 +2460,6 @@ function alustaSos() {
     const el = document.getElementById('sos-boksi');
     if (el) el.value = boksi;
   } catch(e) {}
-}
-
-// DIGIVALMENNUS
-function avaaDigivalmennus() {
-  const syote = document.getElementById('digi-salasana').value;
-  if (syote === 'digi2025') {
-    document.getElementById('digi-lukko').style.display = 'none';
-    document.getElementById('digi-sisalto').style.display = 'block';
-    localStorage.setItem('digi_auki', '1');
-    // Lataa muistio
-    const muistio = localStorage.getItem('digi_muistio') || '';
-    document.getElementById('digi-muistio').value = muistio;
-  } else {
-    document.getElementById('digi-virhe').textContent = 'Väärä salasana';
-    document.getElementById('digi-salasana').value = '';
-    document.getElementById('digi-salasana').focus();
-  }
-}
-
-function lahetaDigiViesti() {
-  const viesti = document.getElementById('digi-viesti').value.trim();
-  const nimi = document.getElementById('digi-nimi').value.trim();
-  if (!viesti) {
-    document.getElementById('digi-palaute').style.color = '#E24B4A';
-    document.getElementById('digi-palaute').textContent = 'Kirjoita viesti ennen lähettämistä.';
-    return;
-  }
-  // Hae omapolun yhteenveto
-  let polkuYhteenveto = '';
-  try {
-    const merkinnat = JSON.parse(localStorage.getItem('vk1') || '[]');
-    const harjoitukset = JSON.parse(localStorage.getItem('vk_harj') || '[]');
-    polkuYhteenveto = `\n\n--- Omapolku-yhteenveto ---\nMerkintöjä: ${merkinnat.length}\nHarjoituksia: ${harjoitukset.length}`;
-    if (merkinnat.length > 0) {
-      const viimeisin = merkinnat[0];
-      const zdNimi = {yli:'Ylivirittynyt',kohonnut:'Kohonnut',ok:'Optimaalinen',las:'Laskenut',ali:'Alivireystila'}[viimeisin.zone||'ok']||'';
-      polkuYhteenveto += `\nViimeisin vireystila: ${zdNimi}`;
-    }
-  } catch(e) {}
-
-  const aihe = encodeURIComponent('Digivalmennus' + (nimi ? ' – ' + nimi : ''));
-  const sisalto = encodeURIComponent(
-    (nimi ? 'Hei Katja,\n\nNimeni on ' + nimi + '.\n\n' : 'Hei Katja,\n\n') +
-    viesti +
-    polkuYhteenveto +
-    '\n\nTerveisin,\n' + (nimi || 'Digivalmennusasiakas')
-  );
-  window.location.href = `mailto:vakaaputiikki@gmail.com?subject=${aihe}&body=${sisalto}`;
-
-  document.getElementById('digi-palaute').style.color = '#3B6D11';
-  document.getElementById('digi-palaute').textContent = '✓ Sähköpostiohjelma avautuu – lähetä viesti sieltä.';
-  document.getElementById('digi-viesti').value = '';
-}
-
-function tallennaMusitio() {
-  const teksti = document.getElementById('digi-muistio').value;
-  localStorage.setItem('digi_muistio', teksti);
-}
-
-// Avaa automaattisesti jos salasana on jo syötetty aiemmin
-if (localStorage.getItem('digi_auki') === '1') {
-  setTimeout(() => {
-    const lukko = document.getElementById('digi-lukko');
-    const sisalto = document.getElementById('digi-sisalto');
-    if (lukko && sisalto) {
-      lukko.style.display = 'none';
-      sisalto.style.display = 'block';
-      const muistio = localStorage.getItem('digi_muistio') || '';
-      document.getElementById('digi-muistio').value = muistio;
-    }
-  }, 100);
 }
 
 // MUISTUTUKSET
