@@ -403,6 +403,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <button class="btn primary" onclick="tallenna()" style="width:100%;margin-bottom:8px">&#10003; Tallenna merkintä</button>
     <div class="palaute" id="palaute"></div>
     <button class="btn" id="jatka-harjoitteet-btn" onclick="siirrySeuraavaan('harjoitteet')" style="width:100%;display:none;margin-top:4px;border-color:#639922;color:#3B6D11">Jatka harjoitteisiin →</button>
+    <div id="viikkosuositus-boksi" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid #eee;background:#fafafa"></div>
   </div>
   <div id="screen-harjoitteet" class="screen">
     <div class="card">
@@ -1561,6 +1562,8 @@ function tallenna(){
   merkinnat.unshift({aika:new Date().toISOString(),zone:aktiivZone,janaArvo,oireet:[...valiturOireet],nota,aanitteet:aanitteetTanaan});
   if(merkinnat.length>200)merkinnat=merkinnat.slice(0,200);
   try{localStorage.setItem('vk1',JSON.stringify(merkinnat));}catch(e){}
+  // Tallenna viimeisin vireystila asiakasalustaa varten
+  try{localStorage.setItem('vakauttava_vireystila',aktiivZone);}catch(e){}
   // Päivitä polku heti jos se on auki
   try { renderPolku(); } catch(e) {}
   document.getElementById('palaute').textContent='Merkintä tallennettu ✓';
@@ -1569,6 +1572,28 @@ function tallenna(){
   valiturOireet=[];renderOireet();setJana(50);
   document.getElementById('ehdotus-wrap').innerHTML='';
   setTimeout(()=>document.getElementById('palaute').textContent='',3000);
+  // Näytä viikkosuositus
+  naytaViikkosuositus(aktiivZone);
+}
+
+function naytaViikkosuositus(zone) {
+  const suositukset = {
+    yli:     { viikko: 3, otsikko: 'Viikko 3: Ylivirittyneisyys', kuvaus: 'Tunnistaminen ja laskeutuminen', vari: '#FDE8EE', reunus: '#C0244A', tekstivari: '#712B13' },
+    kohonnut:{ viikko: 3, otsikko: 'Viikko 3: Ylivirittyneisyys', kuvaus: 'Tunnistaminen ja laskeutuminen', vari: '#FDF3E3', reunus: '#EF9F27', tekstivari: '#633806' },
+    ok:      { viikko: 5, otsikko: 'Viikko 5: Säätelyikkuna',     kuvaus: 'Oman toleranssin tunnistaminen', vari: '#EAF3DE', reunus: '#639922', tekstivari: '#27500A' },
+    las:     { viikko: 4, otsikko: 'Viikko 4: Alavirittyneisyys', kuvaus: 'Tunnistaminen ja aktivointi',   vari: '#E3EEF9', reunus: '#378ADD', tekstivari: '#185FA5' },
+    ali:     { viikko: 4, otsikko: 'Viikko 4: Alavirittyneisyys', kuvaus: 'Tunnistaminen ja aktivointi',   vari: '#EEEDFE', reunus: '#7F77DD', tekstivari: '#3C3489' }
+  };
+  const s = suositukset[zone] || suositukset.ok;
+  const boksi = document.getElementById('viikkosuositus-boksi');
+  boksi.style.display = 'block';
+  boksi.style.background = s.vari;
+  boksi.style.borderColor = s.reunus;
+  boksi.innerHTML = `
+    <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:${s.tekstivari};margin-bottom:5px">Sinulle tänään — digivalmennus</div>
+    <div style="font-size:13px;font-weight:500;color:${s.tekstivari};margin-bottom:2px">${s.otsikko}</div>
+    <div style="font-size:12px;color:${s.tekstivari};opacity:0.85;margin-bottom:10px">${s.kuvaus}</div>
+    <a href="asiakas.html#week-${s.viikko}" style="display:inline-block;padding:7px 16px;background:${s.reunus};color:#fff;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none">Avaa viikko ${s.viikko} →</a>`;
 }
 
 function valitseHarjoitus(nimi) {
