@@ -137,6 +137,12 @@ textarea:focus{border-color:#bbb;background:#fff}
 .aanite-tab-ali.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
 .aanite-zone-title{font-size:12px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:1rem}
 .aanite-card{border:1px solid #eee;border-radius:10px;padding:1rem;margin-bottom:0.75rem;background:#fafafa}
+.video-thumb-wrap{position:relative;margin-top:0.75rem;border-radius:8px;overflow:hidden;cursor:pointer;display:block;text-decoration:none;}
+.video-thumb-wrap img{width:100%;display:block;transition:opacity 0.2s;}
+.video-thumb-wrap:hover img{opacity:0.85;}
+.video-play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.video-play-overlay svg{width:22px;height:22px;fill:white;margin-left:3px;}
+.video-duration{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:11px;padding:2px 6px;border-radius:3px;font-family:sans-serif;}
 .aanite-name{font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px}
 .aanite-desc{font-size:11px;color:#aaa;margin-bottom:0.75rem;line-height:1.4}
 .aanite-player{display:flex;align-items:center;gap:10px}
@@ -759,10 +765,15 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <div id="video-panel-yli">
       <p class="aanite-zone-title">Rauhoittavat videoharjoitukset ylivirittyneeseen tilaan</p>
-      <div class="aanite-card" style="border-style:dashed;opacity:0.6">
-        <div class="aanite-name" style="color:#bbb">Video 1 — Tulossa</div>
-        <div class="aanite-desc" style="color:#ccc">Harjoitusvideo on tulossa tähän pian</div>
-        <div style="font-size:11px;color:#ccc;padding:6px 0">🔒 Ei vielä saatavilla</div>
+      <div class="aanite-card">
+        <div class="aanite-name">Video 1 — Kehollinen harjoite</div>
+        <div class="aanite-desc">Rauhoittava kehollinen harjoite ylivirittyneeseen tilaan</div>
+        <a class="video-thumb-wrap" href="https://www.youtube.com/watch?v=9sqJM-JD9h8" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/9sqJM-JD9h8/hqdefault.jpg" alt="Kehollinen harjoite" loading="lazy">
+          <div class="video-play-overlay">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </a>
       </div>
       <div class="aanite-card" style="border-style:dashed;opacity:0.6">
         <div class="aanite-name" style="color:#bbb">Video 2 — Tulossa</div>
@@ -788,10 +799,15 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <div id="video-panel-koh" style="display:none">
       <p class="aanite-zone-title">Rauhoittavat videoharjoitukset kohonneeseen vireystilaan</p>
-      <div class="aanite-card" style="border-style:dashed;opacity:0.6">
-        <div class="aanite-name" style="color:#bbb">Video 1 — Tulossa</div>
-        <div class="aanite-desc" style="color:#ccc">Harjoitusvideo on tulossa tähän pian</div>
-        <div style="font-size:11px;color:#ccc;padding:6px 0">🔒 Ei vielä saatavilla</div>
+      <div class="aanite-card">
+        <div class="aanite-name">Video 1 — Kehollinen harjoite</div>
+        <div class="aanite-desc">Vakauttava kehollinen harjoite kohonneeseen vireystilaan</div>
+        <a class="video-thumb-wrap" href="https://www.youtube.com/watch?v=dqAASRKAQ-I" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/dqAASRKAQ-I/hqdefault.jpg" alt="Kehollinen harjoite" loading="lazy">
+          <div class="video-play-overlay">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </a>
       </div>
       <div class="aanite-card" style="border-style:dashed;opacity:0.6">
         <div class="aanite-name" style="color:#bbb">Video 2 — Tulossa</div>
@@ -817,10 +833,15 @@ textarea:focus{border-color:#bbb;background:#fff}
 
     <div id="video-panel-ok" style="display:none">
       <p class="aanite-zone-title">Videoharjoitukset optimaaliselle vyöhykkeelle</p>
-      <div class="aanite-card" style="border-style:dashed;opacity:0.6">
-        <div class="aanite-name" style="color:#bbb">Video 1 — Tulossa</div>
-        <div class="aanite-desc" style="color:#ccc">Harjoitusvideo on tulossa tähän pian</div>
-        <div style="font-size:11px;color:#ccc;padding:6px 0">🔒 Ei vielä saatavilla</div>
+      <div class="aanite-card">
+        <div class="aanite-name">Video 1 — Kehollinen harjoite</div>
+        <div class="aanite-desc">Vakauttava kehollinen harjoite optimaaliseen vireystilaan</div>
+        <a class="video-thumb-wrap" href="https://www.youtube.com/watch?v=xcRh_EJ5k8s" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/xcRh_EJ5k8s/hqdefault.jpg" alt="Kehollinen harjoite" loading="lazy">
+          <div class="video-play-overlay">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </a>
       </div>
       <div class="aanite-card" style="border-style:dashed;opacity:0.6">
         <div class="aanite-name" style="color:#bbb">Video 2 — Tulossa</div>
