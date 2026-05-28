@@ -15,6 +15,27 @@
 #salasana-kentta:focus{border-color:#bbb}
 #salasana-nappi{width:100%;padding:11px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:8px}
 #salasana-virhe{font-size:12px;color:#E24B4A;min-height:18px}
+/* Harjoitusanimaatiomodaali */
+@keyframes harj-spin{0%{stroke-dashoffset:283}100%{stroke-dashoffset:0}}
+@keyframes harj-fade-in{0%{opacity:0;transform:scale(0.92)}100%{opacity:1;transform:scale(1)}}
+#harj-anim-modaali{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:flex-end;justify-content:center}
+#harj-anim-modaali.auki{display:flex}
+#harj-anim-sisalto{background:#fff;border-radius:20px 20px 0 0;padding:2rem 1.25rem 2.5rem;width:100%;max-width:680px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.1,0.64,1);max-height:90vh;overflow-y:auto}
+#harj-anim-modaali.auki #harj-anim-sisalto{transform:translateY(0)}
+.harj-anim-drag{width:40px;height:4px;background:#eee;border-radius:2px;margin:0 auto 1.5rem}
+.harj-anim-label{font-size:10px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.1em;text-align:center;margin-bottom:0.5rem}
+.harj-anim-nimi{font-size:20px;font-weight:500;color:#1a1a1a;text-align:center;margin-bottom:0.25rem;line-height:1.3}
+.harj-anim-ohje{font-size:13px;color:#888;text-align:center;margin-bottom:1.75rem}
+.harj-anim-circle-wrap{display:flex;justify-content:center;margin-bottom:1.75rem}
+.harj-anim-svg{width:140px;height:140px}
+.harj-anim-track{fill:none;stroke:#f0f0f0;stroke-width:8}
+.harj-anim-progress{fill:none;stroke:#639922;stroke-width:8;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:283;transform-origin:center;transform:rotate(-90deg);transition:stroke 0.3s}
+.harj-anim-progress.pyorii{animation:harj-spin 60s linear infinite}
+.harj-anim-circle-inner{position:relative;width:140px;height:140px}
+.harj-anim-aika{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:2}
+.harj-anim-ikoni{font-size:30px;line-height:1;margin-bottom:2px}
+.harj-anim-sekunnit{font-size:22px;font-weight:500;color:#1a1a1a;line-height:1}
+.harj-anim-sek-lbl{font-size:10px;color:#aaa;margin-top:2px}
 </style>
 </head>
 <div id="salasana-ruutu">
@@ -584,18 +605,18 @@ textarea:focus{border-color:#bbb;background:#fff}
   <div class="aanite-locked" id="alock-koh-3">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
 </div>
       <div class="aanite-card">
-  <div class="aanite-name" id="an-koh-3-nimi">Äänite 3 — Heijausliike</div>
-  <div class="aanite-desc" id="an-koh-3-kuvaus">Kehotietoinen harjoitus</div>
-  <div class="aanite-player">
-    <button class="aanite-play-btn" id="abtn-koh-3" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-3')">&#9654;</button>
-    <div class="aanite-progress-wrap">
-      <input type="range" class="aanite-progress" id="aprog-koh-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-3',this.value)">
-      <div class="aanite-time"><span id="acur-koh-3">0:00</span><span id="adur-koh-3">0:00</span></div>
-    </div>
-  </div>
-  <audio id="aaudio-koh-3" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/heijausliike.mp3" preload="metadata" ontimeupdate="updateAanite('koh-3')" onended="aaniteEnded('koh-3')" onloadedmetadata="setAaniteDur('koh-3')"></audio>
-  <div class="aanite-locked" id="alock-koh-3">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
-</div>
+        <div class="aanite-name" id="an-koh-4-nimi">Äänite 4 — Heijausliike</div>
+        <div class="aanite-desc" id="an-koh-4-kuvaus">Kehotietoinen harjoitus</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-koh-4" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-4')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-koh-4" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-4',this.value)">
+            <div class="aanite-time"><span id="acur-koh-4">0:00</span><span id="adur-koh-4">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-koh-4" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/heijausliike.mp3" preload="metadata" ontimeupdate="updateAanite('koh-4')" onended="aaniteEnded('koh-4')" onloadedmetadata="setAaniteDur('koh-4')"></audio>
+        <div class="aanite-locked" id="alock-koh-4">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
       <div class="aanite-card" style="border-style:dashed;opacity:0.6">
         <div class="aanite-name" style="color:#bbb">Äänite 5 — Tulossa</div>
         <div class="aanite-desc" style="color:#ccc">Uusi harjoitus on tulossa tähän pian</div>
@@ -693,31 +714,31 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-locked" id="alock-las-2">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
       </div>
       <div class="aanite-card">
-  <div class="aanite-name" id="an-koh-3-nimi">Äänite 3 — Kolmen harjoituksen yhdistelmä</div>
-  <div class="aanite-desc" id="an-koh-3-kuvaus">Rauhoittaa hermostoa</div>
-  <div class="aanite-player">
-    <button class="aanite-play-btn" id="abtn-koh-3" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-3')">&#9654;</button>
-    <div class="aanite-progress-wrap">
-      <input type="range" class="aanite-progress" id="aprog-koh-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-3',this.value)">
-      <div class="aanite-time"><span id="acur-koh-3">0:00</span><span id="adur-koh-3">0:00</span></div>
-    </div>
-    </div>
-  <audio id="aaudio-koh-3" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/Kolmen-harjoituksen-yhdistelma.mp3" preload="metadata" ontimeupdate="updateAanite('koh-3')" onended="aaniteEnded('koh-3')" onloadedmetadata="setAaniteDur('koh-3')"></audio>
-  <div class="aanite-locked" id="alock-koh-3">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
-</div>
-     <div class="aanite-card">
-  <div class="aanite-name" id="an-koh-3-nimi">Äänite 3 — Aistien tiedostaminen</div>
-  <div class="aanite-desc" id="an-koh-3-kuvaus">Yoga Nidra</div>
-  <div class="aanite-player">
-    <button class="aanite-play-btn" id="abtn-koh-3" style="background:#FDF3E3;color:#633806" onclick="toggleAanite('koh-3')">&#9654;</button>
-    <div class="aanite-progress-wrap">
-      <input type="range" class="aanite-progress" id="aprog-koh-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('koh-3',this.value)">
-      <div class="aanite-time"><span id="acur-koh-3">0:00</span><span id="adur-koh-3">0:00</span></div>
-    </div>
-  </div>
-  <audio id="aaudio-koh-3" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/Yoga-Nirda-Aistien-tiedostaminen.mp3" preload="metadata" ontimeupdate="updateAanite('koh-3')" onended="aaniteEnded('koh-3')" onloadedmetadata="setAaniteDur('koh-3')"></audio>
-  <div class="aanite-locked" id="alock-koh-3">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
-</div>
+        <div class="aanite-name" id="an-las-3-nimi">Äänite 3 — Kolmen harjoituksen yhdistelmä</div>
+        <div class="aanite-desc" id="an-las-3-kuvaus">Rauhoittaa hermostoa</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-las-3" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-3')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-las-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-3',this.value)">
+            <div class="aanite-time"><span id="acur-las-3">0:00</span><span id="adur-las-3">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-las-3" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/Kolmen-harjoituksen-yhdistelma.mp3" preload="metadata" ontimeupdate="updateAanite('las-3')" onended="aaniteEnded('las-3')" onloadedmetadata="setAaniteDur('las-3')"></audio>
+        <div class="aanite-locked" id="alock-las-3">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
+      <div class="aanite-card">
+        <div class="aanite-name" id="an-las-4-nimi">Äänite 4 — Aistien tiedostaminen</div>
+        <div class="aanite-desc" id="an-las-4-kuvaus">Yoga Nidra</div>
+        <div class="aanite-player">
+          <button class="aanite-play-btn" id="abtn-las-4" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-4')">&#9654;</button>
+          <div class="aanite-progress-wrap">
+            <input type="range" class="aanite-progress" id="aprog-las-4" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-4',this.value)">
+            <div class="aanite-time"><span id="acur-las-4">0:00</span><span id="adur-las-4">0:00</span></div>
+          </div>
+        </div>
+        <audio id="aaudio-las-4" src="https://www.vakauttamisvalmentaja.fi/wp-content/uploads/2026/05/Yoga-Nirda-Aistien-tiedostaminen.mp3" preload="metadata" ontimeupdate="updateAanite('las-4')" onended="aaniteEnded('las-4')" onloadedmetadata="setAaniteDur('las-4')"></audio>
+        <div class="aanite-locked" id="alock-las-4">&#128274; Lisää MP3-osoite koodiin aktivoidaksesi soittimen</div>
+      </div>
       <div class="aanite-card" style="border-style:dashed;opacity:0.6">
         <div class="aanite-name" style="color:#bbb">Äänite 5 — Tulossa</div>
         <div class="aanite-desc" style="color:#ccc">Uusi harjoitus on tulossa tähän pian</div>
@@ -1875,15 +1896,69 @@ setupHsJana('hs-jtrack-jalkeen', 'hs-jh-jalkeen', 'hs-jalkeen-label', v => { hsJ
 
 let hs_ennenTallennettu = 50;
 
-function aloitaHarjoitusSeuranta() {
-  const nimi = document.getElementById('hs-harj-nimi').value.trim();
-  if (!nimi) { document.getElementById('hs-harj-nimi').focus(); return; }
-  hs_ennenTallennettu = hsEnnenArvo;
+let harjAnimAikerId = null;
+let harjAnimSekunnit = 0;
+let harjAnimNimiTallessa = '';
+
+const HARJ_IKONIT = ['🌿','🌱','🍃','💚','✨','🌊','🌸','🫁','🧘','💫'];
+function harjAnimIkoni(nimi) {
+  let idx = 0;
+  for (let i = 0; i < nimi.length; i++) idx = (idx + nimi.charCodeAt(i)) % HARJ_IKONIT.length;
+  return HARJ_IKONIT[idx];
+}
+
+function avaaHarjAnim(nimi) {
+  harjAnimNimiTallessa = nimi;
+  document.getElementById('harj-anim-nimi-teksti').textContent = nimi;
+  document.getElementById('harj-anim-ikoni').textContent = harjAnimIkoni(nimi);
+  harjAnimSekunnit = 0;
+  document.getElementById('harj-anim-sekunnit').textContent = '0:00';
+  const ring = document.getElementById('harj-anim-ring');
+  ring.classList.remove('pyorii');
+  void ring.offsetWidth;
+  ring.classList.add('pyorii');
+  if (harjAnimAikerId) clearInterval(harjAnimAikerId);
+  harjAnimAikerId = setInterval(() => {
+    harjAnimSekunnit++;
+    const m = Math.floor(harjAnimSekunnit / 60);
+    const s = harjAnimSekunnit % 60;
+    document.getElementById('harj-anim-sekunnit').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+  document.getElementById('harj-anim-modaali').classList.add('auki');
+}
+
+function lopetaHarjAnim() {
+  const nimi = harjAnimNimiTallessa;
+  suljeHarjAnimModaali();
   document.getElementById('hs-kaynnissa-nimi').textContent = nimi;
   document.getElementById('hs-ennen-vaihe').style.display = 'none';
   document.getElementById('hs-jalkeen-vaihe').style.display = 'block';
   document.getElementById('hs-valmis-vaihe').style.display = 'none';
   document.getElementById('harj-seuranta-tila').textContent = 'Tee harjoitus, sitten merkitse vireystila jälkeen.';
+  const kortti = document.getElementById('harj-seuranta-card');
+  if (kortti) setTimeout(() => kortti.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+}
+
+function peruutaHarjAnim() {
+  suljeHarjAnimModaali();
+}
+
+function suljeHarjAnimModaali() {
+  if (harjAnimAikerId) { clearInterval(harjAnimAikerId); harjAnimAikerId = null; }
+  const ring = document.getElementById('harj-anim-ring');
+  ring.classList.remove('pyorii');
+  document.getElementById('harj-anim-modaali').classList.remove('auki');
+}
+
+function harjAnimTaustaklik(e) {
+  if (e.target === document.getElementById('harj-anim-modaali')) peruutaHarjAnim();
+}
+
+function aloitaHarjoitusSeuranta() {
+  const nimi = document.getElementById('hs-harj-nimi').value.trim();
+  if (!nimi) { document.getElementById('hs-harj-nimi').focus(); return; }
+  hs_ennenTallennettu = hsEnnenArvo;
+  avaaHarjAnim(nimi);
 }
 
 function tallennaHarjoitusSeuranta() {
@@ -2745,6 +2820,34 @@ function tuoMustiinpanot(event) {
 }
 
 </script>
+
+<div id="harj-anim-modaali" onclick="harjAnimTaustaklik(event)">
+  <div id="harj-anim-sisalto">
+    <div class="harj-anim-drag"></div>
+    <div id="harj-anim-vaihe-1">
+      <div class="harj-anim-label">Seuraa harjoituksen vaikutusta</div>
+      <div class="harj-anim-nimi" id="harj-anim-nimi-teksti">Harjoitus</div>
+      <div class="harj-anim-ohje">Tee harjoitus rauhassa.</div>
+      <div class="harj-anim-circle-wrap">
+        <div class="harj-anim-circle-inner">
+          <svg class="harj-anim-svg" viewBox="0 0 100 100">
+            <circle class="harj-anim-track" cx="50" cy="50" r="45"/>
+            <circle class="harj-anim-progress" id="harj-anim-ring" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="harj-anim-aika">
+            <div class="harj-anim-ikoni" id="harj-anim-ikoni">🌿</div>
+            <span class="harj-anim-sekunnit" id="harj-anim-sekunnit">0:00</span>
+            <span class="harj-anim-sek-lbl">kulunut</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#888;text-align:center;margin-bottom:1.5rem">Klikkaa kun olet valmis</div>
+      <button onclick="lopetaHarjAnim()" style="width:100%;padding:14px;background:#1a1a1a;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px">✓ Harjoitus tehty</button>
+      <button onclick="peruutaHarjAnim()" style="width:100%;padding:12px;background:none;border:1px solid #eee;border-radius:12px;font-size:13px;color:#888;cursor:pointer;font-family:'DM Sans',sans-serif">Peruuta</button>
+    </div>
+  </div>
+</div>
+
 <div style="text-align:center;padding:2rem 0 1.5rem;font-size:11px;color:#ccc">© Vakauttamisvalmentaja – Katja Saarinen</div>
 </body>
 </html>
