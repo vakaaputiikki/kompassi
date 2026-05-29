@@ -80,8 +80,8 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .oire-btn.val{border-color:#639922;background:#f0f7e6;color:#3B6D11}
 .oire-btn.val.yli{border-color:#C0244A;background:#fde8ee;color:#712B13}
 .oire-btn.val.kohonnut{border-color:#EF9F27;background:#fdf3e3;color:#633806}
-.oire-btn.val.las{border-color:#378ADD;background:#e3eef9;color:#185FA5}
-.oire-btn.val.ali{border-color:#7F77DD;background:#eeedfe;color:#3C3489}
+.oire-btn.val.las{border-color:#7F77DD;background:#eeedfe;color:#3C3489}
+.oire-btn.val.ali{border-color:#378ADD;background:#e3eef9;color:#185FA5}
 .step-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
 .step-num{width:22px;height:22px;border-radius:50%;background:#f5f5f5;border:1px solid #e0e0e0;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#888}
 .step-title{font-size:14px;font-weight:500;color:#1a1a1a}
@@ -120,7 +120,9 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .jseg-las{left:65%;width:15%;background:#E3EEF9}
 .jseg-ali{left:80%;width:20%;background:#EEEDFE;border-radius:0 24px 24px 0}
 .jborder{position:absolute;inset:0;border-radius:24px;border:1px solid #e8e8e8;pointer-events:none}
-.jdiv{position:absolute;top:10px;bottom:10px;width:1px;background:#e0e0e0}
+.jdiv{display:none}
+.jseg-gradient{position:absolute;inset:0;border-radius:24px;background:linear-gradient(to right, #FDE8EE 0%, #FDF3E3 22%, #E8F5E9 42%, #EEEDFE 72%, #E3EEF9 100%);pointer-events:none}
+.jseg{background:transparent!important}
 .jhandle{position:absolute;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid #3B6D11;transform:translate(-50%,-50%);cursor:grab;z-index:3;transition:border-color 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
 .jlabels{display:flex;margin-top:4px}
 .jlbl{font-size:10px;color:#aaa;text-align:center;line-height:1.3}
@@ -128,8 +130,8 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;-webkit-font
 .b-yli{background:#FAECE7;color:#712B13}
 .b-koh{background:#FAEEDA;color:#633806}
 .b-ok{background:#EAF3DE;color:#27500A}
-.b-las{background:#E6F1FB;color:#185FA5}
-.b-ali{background:#EEEDFE;color:#3C3489}
+.b-las{background:#EEEDFE;color:#3C3489}
+.b-ali{background:#E6F1FB;color:#185FA5}
 textarea{width:100%;min-height:75px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px;border:1px solid #eee;border-radius:8px;background:#fafafa;color:#1a1a1a;outline:none}
 textarea:focus{border-color:#bbb;background:#fff}
 .btn{padding:9px 22px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:#1a1a1a;transition:background 0.12s}
@@ -154,8 +156,8 @@ textarea:focus{border-color:#bbb;background:#fff}
 .aanite-tab-yli.active{background:#FAECE7;color:#712B13;border-color:#FAECE7}
 .aanite-tab-koh.active{background:#FDF3E3;color:#633806;border-color:#F5DFB8}
 .aanite-tab-ok.active{background:#EAF3DE;color:#27500A;border-color:#EAF3DE}
-.aanite-tab-las.active{background:#E3EEF9;color:#185FA5;border-color:#B8D4EF}
-.aanite-tab-ali.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
+.aanite-tab-las.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
+.aanite-tab-ali.active{background:#E3EEF9;color:#185FA5;border-color:#B8D4EF}
 .aanite-zone-title{font-size:12px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:1rem}
 .aanite-card{border:1px solid #eee;border-radius:10px;padding:1rem;margin-bottom:0.75rem;background:#fafafa}
 .video-thumb-wrap{position:relative;margin-top:0.75rem;border-radius:8px;overflow:hidden;cursor:pointer;display:block;text-decoration:none;}
@@ -344,6 +346,7 @@ textarea:focus{border-color:#bbb;background:#fff}
   <div id="screen-kirjaa" class="screen visible">
     <div class="card">
       <div class="step-row"><span class="step-num">1</span><span class="step-title">Mitä huomaat juuri nyt?</span></div>
+      <div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:0.75rem">Valitse tunnistamasi oireet — ne ovat suuntaa antavia ja ehdottavat sinulle vireystilaa. Jana siirtyy automaattisesti, mutta voit aina säätää sen itse siihen kohtaan joka tuntuu oikealta. Kaikki tallentuu omapolkuun, josta voit seurata missä vireystiloissa olet liikkunut. Tämä ei ole testi — tämä on työkalu, jolla opit huomaamaan mitä sinussa tapahtuu.</div>
       <div class="slabel">Keho</div>
       <div class="oire-grid" id="og-keho"></div>
       <div class="slabel">Mieli</div>
@@ -413,18 +416,20 @@ textarea:focus{border-color:#bbb;background:#fff}
         </div>
       </div>
       <div class="jana-wrap">
+        <div style="font-size:11px;color:#aaa;margin-bottom:0.4rem">Vedä palloa janalla</div>
         <div class="jtrack" id="jtrack">
+          <div class="jseg-gradient"></div>
           <div class="jseg jseg-yli"></div><div class="jseg jseg-koh"></div><div class="jseg jseg-ok"></div><div class="jseg jseg-las"></div><div class="jseg jseg-ali"></div>
           <div class="jdiv" style="left:20%"></div><div class="jdiv" style="left:35%"></div><div class="jdiv" style="left:65%"></div><div class="jdiv" style="left:80%"></div>
           <div class="jborder"></div>
           <div class="jhandle" id="jh" style="left:50%"></div>
         </div>
         <div class="jlabels">
-          <div class="jlbl" style="width:20%">Ylivirittynyt</div>
-          <div class="jlbl" style="width:15%">Kohonnut</div>
-          <div class="jlbl" style="width:30%;color:#3B6D11;font-weight:500">Tasapainoinen vireystila</div>
-          <div class="jlbl" style="width:15%">Laskenut</div>
-          <div class="jlbl" style="width:20%">Alivireystila</div>
+          <div class="jlbl" style="width:20%">Levoton</div>
+          <div class="jlbl" style="width:15%">Pirteä</div>
+          <div class="jlbl" style="width:30%;color:#3B6D11;font-weight:500">Rauhallinen</div>
+          <div class="jlbl" style="width:15%">Unelias</div>
+          <div class="jlbl" style="width:20%">Uupunut</div>
         </div>
       </div>
     </div>
@@ -450,6 +455,7 @@ textarea:focus{border-color:#bbb;background:#fff}
     <!-- Harjoituksen seuranta: ennen/jälkeen -->
     <div class="card" id="harj-seuranta-card">
       <div class="slabel">Seuraa harjoituksen vaikutusta</div>
+      <div style="font-size:12px;color:#777;line-height:1.6;margin-bottom:0.75rem">Tämä osio on sinua varten — voit nähdä omapolulta mikä harjoitus on saattanut auttaa. Ei ole oikeaa eikä väärää. Ihminen reagoi eri tilanteissa eri tavalla.</div>
       <div id="harj-seuranta-tila" style="font-size:12px;color:#888;margin-bottom:0.75rem">Valitse harjoitus yllä ja aloita seuranta.</div>
 
       <!-- Vaihe: ei aloitettu -->
@@ -457,7 +463,9 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Mikä harjoitus?</div>
         <input id="hs-harj-nimi" type="text" placeholder="esim. Pitkä uloshengitys" style="width:100%;padding:8px 10px;border:1px solid #eee;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:#fafafa;outline:none;margin-bottom:0.75rem">
         <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Vireystila <em>ennen</em> harjoitusta</div>
+        <div style="font-size:11px;color:#aaa;margin-bottom:0.4rem">Vedä palloa janalla</div>
         <div class="jtrack" id="hs-jtrack-ennen" style="height:38px;margin-bottom:0.4rem">
+          <div class="jseg-gradient"></div>
           <div class="jseg jseg-yli"></div><div class="jseg jseg-koh"></div><div class="jseg jseg-ok"></div><div class="jseg jseg-las"></div><div class="jseg jseg-ali"></div>
           <div class="jdiv" style="left:20%"></div><div class="jdiv" style="left:35%"></div><div class="jdiv" style="left:65%"></div><div class="jdiv" style="left:80%"></div>
           <div class="jborder"></div>
@@ -470,8 +478,10 @@ textarea:focus{border-color:#bbb;background:#fff}
       <!-- Vaihe: harjoitus käynnissä -->
       <div id="hs-jalkeen-vaihe" style="display:none">
         <div style="font-size:13px;color:#888;margin-bottom:0.75rem">Harjoitus: <strong id="hs-kaynnissa-nimi"></strong></div>
-        <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Vireystila <em>jälkeen</em></div>
+        <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:0.5rem">Miltä kehossasi tuntuu nyt?</div>
+        <div style="font-size:11px;color:#aaa;margin-bottom:0.4rem">Vedä palloa janalla</div>
         <div class="jtrack" id="hs-jtrack-jalkeen" style="height:38px;margin-bottom:0.4rem">
+          <div class="jseg-gradient"></div>
           <div class="jseg jseg-yli"></div><div class="jseg jseg-koh"></div><div class="jseg jseg-ok"></div><div class="jseg jseg-las"></div><div class="jseg jseg-ali"></div>
           <div class="jdiv" style="left:20%"></div><div class="jdiv" style="left:35%"></div><div class="jdiv" style="left:65%"></div><div class="jdiv" style="left:80%"></div>
           <div class="jborder"></div>
@@ -484,7 +494,7 @@ textarea:focus{border-color:#bbb;background:#fff}
 
       <!-- Vaihe: tallennettu palaute -->
       <div id="hs-valmis-vaihe" style="display:none">
-        <div id="hs-vaikutus-palaute" style="font-size:13px;color:#1a1a1a;padding:12px;background:#f5f5f5;border-radius:8px;text-align:center;margin-bottom:0.75rem"></div>
+        <div id="hs-vaikutus-palaute" style="font-size:13px;color:#3B6D11;padding:12px;background:#EAF3DE;border-radius:8px;text-align:center;margin-bottom:0.75rem"></div>
         <button class="btn" onclick="uusiHarjoitusSeuranta()" style="width:100%">+ Uusi seuranta</button>
       </div>
     </div>
@@ -495,11 +505,11 @@ textarea:focus{border-color:#bbb;background:#fff}
   <!-- ÄÄNITTEET -->
   <div id="screen-aanitteet" class="screen">
     <div class="aanite-tabs">
-      <button class="aanite-tab aanite-tab-yli active" onclick="setAaniteTab('yli',this)">&#128308; Ylivirittynyt</button>
-      <button class="aanite-tab aanite-tab-koh" onclick="setAaniteTab('koh',this)">🟠 Kohonnut</button>
-      <button class="aanite-tab aanite-tab-ok" onclick="setAaniteTab('ok',this)">&#128994; Tasapainoinen</button>
-      <button class="aanite-tab aanite-tab-las" onclick="setAaniteTab('las',this)">🔵 Laskenut</button>
-      <button class="aanite-tab aanite-tab-ali" onclick="setAaniteTab('ali',this)">&#128309; Alivireystila</button>
+      <button class="aanite-tab aanite-tab-yli active" onclick="setAaniteTab('yli',this)">&#128308; Levoton</button>
+      <button class="aanite-tab aanite-tab-koh" onclick="setAaniteTab('koh',this)">🟠 Pirteä</button>
+      <button class="aanite-tab aanite-tab-ok" onclick="setAaniteTab('ok',this)">&#128994; Rauhallinen</button>
+      <button class="aanite-tab aanite-tab-las" onclick="setAaniteTab('las',this)">🟣 Unelias</button>
+      <button class="aanite-tab aanite-tab-ali" onclick="setAaniteTab('ali',this)">🔵 Uupunut</button>
     </div>
 
     <div id="aanite-panel-yli">
@@ -691,7 +701,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name">Äänite 1 — Kehon rajat</div>
         <div class="aanite-desc">Lyhyt ja tehokas harjoitus vireystilan nostamiseen</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-las-1" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-1')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-las-1" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('las-1')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-las-1" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-1',this.value)">
             <div class="aanite-time"><span id="acur-las-1">0:00</span><span id="adur-las-1">0:00</span></div>
@@ -704,7 +714,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name">Äänite 2 — Taputa - silitä</div>
         <div class="aanite-desc">Aktivoiva liikuntaharjoitus</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-las-2" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-2')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-las-2" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('las-2')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-las-2" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-2',this.value)">
             <div class="aanite-time"><span id="acur-las-2">0:00</span><span id="adur-las-2">0:00</span></div>
@@ -717,7 +727,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-las-3-nimi">Äänite 3 — Kolmen harjoituksen yhdistelmä</div>
         <div class="aanite-desc" id="an-las-3-kuvaus">Rauhoittaa hermostoa</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-las-3" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-3')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-las-3" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('las-3')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-las-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-3',this.value)">
             <div class="aanite-time"><span id="acur-las-3">0:00</span><span id="adur-las-3">0:00</span></div>
@@ -730,7 +740,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-las-4-nimi">Äänite 4 — Aistien tiedostaminen</div>
         <div class="aanite-desc" id="an-las-4-kuvaus">Yoga Nidra</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-las-4" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('las-4')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-las-4" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('las-4')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-las-4" value="0" min="0" max="100" step="0.1" oninput="seekAanite('las-4',this.value)">
             <div class="aanite-time"><span id="acur-las-4">0:00</span><span id="adur-las-4">0:00</span></div>
@@ -752,7 +762,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-ali-1-nimi">Äänite 1 — Jännitä ja rentouta</div>
         <div class="aanite-desc" id="an-ali-1-kuvaus">Lyhyt ja tehokas harjoutus alivireystilan säätelyyn</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-ali-1" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('ali-1')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-ali-1" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('ali-1')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-ali-1" value="0" min="0" max="100" step="0.1" oninput="seekAanite('ali-1',this.value)">
             <div class="aanite-time"><span id="acur-ali-1">0:00</span><span id="adur-ali-1">0:00</span></div>
@@ -765,7 +775,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-ali-2-nimi">Äänite 2 — Voimamedis</div>
         <div class="aanite-desc" id="an-ali-2-kuvaus">Voimaannuttava lyhyt meditaatio</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-ali-2" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('ali-2')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-ali-2" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('ali-2')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-ali-2" value="0" min="0" max="100" step="0.1" oninput="seekAanite('ali-2',this.value)">
             <div class="aanite-time"><span id="acur-ali-2">0:00</span><span id="adur-ali-2">0:00</span></div>
@@ -778,7 +788,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-ali-3-nimi">Äänite 3 — Tyhjän tuolin päällä istuminen</div>
         <div class="aanite-desc" id="an-ali-3-kuvaus">Lyhyt harjoitus joka aktivoi kehoa</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-ali-3" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('ali-3')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-ali-3" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('ali-3')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-ali-3" value="0" min="0" max="100" step="0.1" oninput="seekAanite('ali-3',this.value)">
             <div class="aanite-time"><span id="acur-ali-3">0:00</span><span id="adur-ali-3">0:00</span></div>
@@ -791,7 +801,7 @@ textarea:focus{border-color:#bbb;background:#fff}
         <div class="aanite-name" id="an-ali-4-nimi">Äänite 4 — Kävelyrytmin muuttaminen</div>
         <div class="aanite-desc" id="an-ali-4-kuvaus">Aktivoiva harjoitus</div>
         <div class="aanite-player">
-          <button class="aanite-play-btn" id="abtn-ali-4" style="background:#EEEDFE;color:#3C3489" onclick="toggleAanite('ali-4')">&#9654;</button>
+          <button class="aanite-play-btn" id="abtn-ali-4" style="background:#E3EEF9;color:#185FA5" onclick="toggleAanite('ali-4')">&#9654;</button>
           <div class="aanite-progress-wrap">
             <input type="range" class="aanite-progress" id="aprog-ali-4" value="0" min="0" max="100" step="0.1" oninput="seekAanite('ali-4',this.value)">
             <div class="aanite-time"><span id="acur-ali-4">0:00</span><span id="adur-ali-4">0:00</span></div>
@@ -814,11 +824,11 @@ textarea:focus{border-color:#bbb;background:#fff}
   <!-- VIDEOT -->
   <div id="screen-videot" class="screen">
     <div class="aanite-tabs">
-      <button class="aanite-tab aanite-tab-yli active" onclick="setVideoTab('yli',this)">&#128308; Ylivirittynyt</button>
-      <button class="aanite-tab aanite-tab-koh" onclick="setVideoTab('koh',this)">🟠 Kohonnut</button>
-      <button class="aanite-tab aanite-tab-ok" onclick="setVideoTab('ok',this)">&#128994; Tasapainoinen</button>
-      <button class="aanite-tab aanite-tab-las" onclick="setVideoTab('las',this)">🔵 Laskenut</button>
-      <button class="aanite-tab aanite-tab-ali" onclick="setVideoTab('ali',this)">&#128309; Alivireystila</button>
+      <button class="aanite-tab aanite-tab-yli active" onclick="setVideoTab('yli',this)">&#128308; Levoton</button>
+      <button class="aanite-tab aanite-tab-koh" onclick="setVideoTab('koh',this)">🟠 Pirteä</button>
+      <button class="aanite-tab aanite-tab-ok" onclick="setVideoTab('ok',this)">&#128994; Rauhallinen</button>
+      <button class="aanite-tab aanite-tab-las" onclick="setVideoTab('las',this)">🟣 Unelias</button>
+      <button class="aanite-tab aanite-tab-ali" onclick="setVideoTab('ali',this)">🔵 Uupunut</button>
     </div>
 
     <div id="video-panel-yli">
@@ -1126,7 +1136,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#FAECE7">
         <div style="width:10px;height:10px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:3px"></div>
         <div>
-          <div style="font-size:12px;font-weight:500;color:#712B13">Ylivirittynyt</div>
+          <div style="font-size:12px;font-weight:500;color:#712B13">Levoton</div>
           <div style="font-size:11px;color:#993C1D;line-height:1.5">Hermosto hälytystilassa. Sympaattinen hermosto yliaktivoitunut. Tyypillistä: sydän hakkaa, ajatukset kiitävät, vaikea pysähtyä.</div>
         </div>
       </div>
@@ -1134,7 +1144,7 @@ textarea:focus{border-color:#bbb;background:#fff}
       <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#FDF3E3">
         <div style="width:10px;height:10px;border-radius:50%;background:#EF9F27;flex-shrink:0;margin-top:3px"></div>
         <div>
-          <div style="font-size:12px;font-weight:500;color:#633806">Kohonnut</div>
+          <div style="font-size:12px;font-weight:500;color:#633806">Pirteä</div>
           <div style="font-size:11px;color:#854F0B;line-height:1.5">Hermosto valppaana, suunta ylöspäin. Levoton olo, lihasjännitys kasvaa, mieli aktiivinen.</div>
         </div>
       </div>
@@ -1142,24 +1152,24 @@ textarea:focus{border-color:#bbb;background:#fff}
       <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#EAF3DE">
         <div style="width:10px;height:10px;border-radius:50%;background:#639922;flex-shrink:0;margin-top:3px"></div>
         <div>
-          <div style="font-size:12px;font-weight:500;color:#27500A">Tasapainoinen vireystila</div>
+          <div style="font-size:12px;font-weight:500;color:#27500A">Rauhallinen</div>
           <div style="font-size:11px;color:#3B6D11;line-height:1.5">Sosiaalisen liittymisen tila. Vagushermo aktivoitunut. Läsnäolo helppoa, mieli selkeä, keho rento mutta valmis.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#E3EEF9">
-        <div style="width:10px;height:10px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:3px"></div>
-        <div>
-          <div style="font-size:12px;font-weight:500;color:#0C447C">Laskenut</div>
-          <div style="font-size:11px;color:#185FA5;line-height:1.5">Hermosto hidastuu. Keho pyytää lepoa tai aktivointia. Liikkeet ja ajatukset raskaita.</div>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#EEEDFE">
         <div style="width:10px;height:10px;border-radius:50%;background:#7F77DD;flex-shrink:0;margin-top:3px"></div>
         <div>
-          <div style="font-size:12px;font-weight:500;color:#3C3489">Alivireystila</div>
-          <div style="font-size:11px;color:#534AB7;line-height:1.5">Jähmettyminen – vagushermon selän puoleinen haara aktivoitunut. Lamaannus, dissosiaatio, autopilotti.</div>
+          <div style="font-size:12px;font-weight:500;color:#3C3489">Unelias</div>
+          <div style="font-size:11px;color:#534AB7;line-height:1.5">Hermosto hidastuu. Keho pyytää lepoa tai aktivointia. Liikkeet ja ajatukset raskaita.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:#E3EEF9">
+        <div style="width:10px;height:10px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:3px"></div>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:#185FA5">Uupunut</div>
+          <div style="font-size:11px;color:#185FA5;line-height:1.5">Jähmettyminen – vagushermon selän puoleinen haara aktivoitunut. Lamaannus, dissosiaatio, autopilotti.</div>
         </div>
       </div>
 
@@ -1318,20 +1328,16 @@ textarea:focus{border-color:#bbb;background:#fff}
 const OIREET={
   keho:[
     {t:'Sydän hakkaa / syke nousee',z:'yli'},
-    {t:'Lihasjännitys',z:'yli'},
     {t:'Hengitys kiihtynyt',z:'yli'},
-    {t:'Kädet hikoavat',z:'yli'},
-    {t:'Vatsaa kiristää',z:'yli'},
-    {t:'Unettomuus',z:'yli'},
+    {t:'Lihasjännitys',z:'yli'},
     {t:'Kehon säryt lisääntyvät',z:'kohonnut'},
     {t:'Aistit herkillä',z:'kohonnut'},
+    {t:'Vatsaa kiristää',z:'kohonnut'},
     {t:'Keho rauhallinen',z:'ok'},
     {t:'Kehon toiminnot tasapainossa',z:'ok'},
     {t:'Kädet tai jalat raskaat',z:'las'},
     {t:'Liike vaivalloista',z:'las'},
     {t:'Keho tuntuu etäiseltä',z:'las'},
-    {t:'Puutumisen tunne',z:'ali'},
-    {t:'Turtuneisuus',z:'ali'},
     {t:'Voimakas väsymys',z:'ali'},
     {t:'Olo painava ja väsynyt',z:'ali'}
   ],
@@ -1341,6 +1347,7 @@ const OIREET={
     {t:'Paniikki',z:'yli'},
     {t:'Ärtyneisyys',z:'kohonnut'},
     {t:'Levoton olo',z:'kohonnut'},
+    {t:'Ylikierroksilla / ei saa rauhoittua',z:'kohonnut'},
     {t:'Mieli selkeä ja rauhallinen',z:'ok'},
     {t:'Läsnäolevampi',z:'ok'},
     {t:'Ei motivaatiota',z:'las'},
@@ -1348,14 +1355,13 @@ const OIREET={
     {t:'Reagointi hidastuu',z:'las'},
     {t:'Tyhjyyden tunne',z:'ali'},
     {t:'Toivottomuus',z:'ali'},
-    {t:'Häpeä',z:'ali'},
-    {t:'Masennuksen kaltaiset oireet',z:'ali'},
-    {t:'Dissosiaatio',z:'ali'},
+    {t:'Dissosiaatio / etäinen olo',z:'ali'},
     {t:'Autopilotilla eteneminen',z:'ali'}
   ],
   kayt:[
     {t:'Välttely tai pakeneminen',z:'yli'},
     {t:'Ylisuorittaminen / turbovaihe',z:'yli'},
+    {t:'Impulsiivisuus / nopeat reaktiot',z:'yli'},
     {t:'Puhuminen nopeutunut',z:'kohonnut'},
     {t:'Vaikea pysähtyä',z:'kohonnut'},
     {t:'Kehon tarpeiden ohittaminen',z:'kohonnut'},
@@ -1363,8 +1369,11 @@ const OIREET={
     {t:'Kyky asettaa omia rajoja',z:'ok'},
     {t:'Tekeminen hidastuu',z:'las'},
     {t:'Motivaatio laskee',z:'las'},
+    {t:'Vetäytyminen sosiaalisista tilanteista',z:'las'},
     {t:'Tekeminen pysähtyy',z:'ali'},
-    {t:'Eristäytyminen',z:'ali'}
+    {t:'Eristäytyminen',z:'ali'},
+    {t:'Vaikea tehdä päätöksiä',z:'ali'},
+    {t:'Reagointi ulkoisiin ärsykkeisiin vaikeutuu',z:'ali'}
   ]
 };
 
@@ -1512,20 +1521,20 @@ const YLLAPITO={
 };
 
 const ZD={
-  yli:{id:'yli',title:'Ylivirittynyt',sub:'Hermosto hälytystilassa. Sympaattinen hermosto aktivoitunut.',handle:'#C0244A',bc:'b-yli',zclass:'zone-yli',
+  yli:{id:'yli',title:'Levoton',sub:'Hermosto hälytystilassa. Sympaattinen hermosto aktivoitunut.',handle:'#C0244A',bc:'b-yli',zclass:'zone-yli',
     oireet:[{dot:'#E24B4A',txt:'Sydän hakkaa nopeasti'},{dot:'#E24B4A',txt:'Hengitys tihenee, aistit herkillä'},{dot:'#D85A30',txt:'Niska ja hartiat jännittyy'},{dot:'#7F77DD',txt:'Ajatuksia tulvii — paniikki mahdollinen'},{dot:'#EF9F27',txt:'Vatsa kiristää tai pyörii'},{dot:'#D85A30',txt:'Vaikea pysähtyä tai nukkua'}],
     pts:{sydan:{op:1,fast:true},hengitys:{op:1,fast:true},niska:{op:1},vatsa:{op:0.8},kadet:{op:0.9},paa:{op:1,fast:true},rento:{op:0},jalat:{op:0}},hkey:'yli'},
-  kohonnut:{id:'kohonnut',title:'Kohonnut vireystila',sub:'Hermosto valppaana. Ei vielä kriisi, mutta suunta on ylöspäin.',handle:'#854F0B',bc:'b-koh',zclass:'zone-kohonnut',
+  kohonnut:{id:'kohonnut',title:'Pirteä',sub:'Hermosto valppaana. Ei vielä kriisi, mutta suunta on ylöspäin.',handle:'#854F0B',bc:'b-koh',zclass:'zone-kohonnut',
     oireet:[{dot:'#EF9F27',txt:'Sydän hieman nopeutunut'},{dot:'#EF9F27',txt:'Hengitys tihenee kevyesti'},{dot:'#D85A30',txt:'Lihasjännitys kasvaa huomaamatta'},{dot:'#7F77DD',txt:'Mieli aktiivinen, ajatuksia paljon'},{dot:'#EF9F27',txt:'Levoton olo — vaikea istua paikallaan'}],
     pts:{sydan:{op:0.6},hengitys:{op:0.5},niska:{op:0.5},vatsa:{op:0.3},kadet:{op:0.2},paa:{op:0.5},rento:{op:0},jalat:{op:0}},hkey:'kohonnut'},
   ok:{id:'ok',title:'Tasapainoinen vireystila',sub:'Sosiaalisen liittymisen tila. Vagushermon vatsan puoleinen haara aktivoitunut.',handle:'#3B6D11',bc:'b-ok',zclass:'zone-ok',
     oireet:[{dot:'#639922',txt:'Sydän lyö rauhallisesti'},{dot:'#639922',txt:'Hengitys syvää ja tasaista'},{dot:'#639922',txt:'Lihakset rentoina mutta valmiina'},{dot:'#639922',txt:'Mieli selkeä — flow-tila mahdollinen'},{dot:'#639922',txt:'Läsnäolo tuntuu helpolta'}],
     pts:{sydan:{op:0},hengitys:{op:0},niska:{op:0},vatsa:{op:0},kadet:{op:0},paa:{op:0},rento:{op:1},jalat:{op:0}},hkey:'ok'},
-  las:{id:'las',title:'Laskenut vireystila',sub:'Hermosto alkaa hidastua. Keho pyytää lepoa tai aktivointia.',handle:'#185FA5',bc:'b-las',zclass:'zone-las',
-    oireet:[{dot:'#378ADD',txt:'Sydän lyö hitaammin'},{dot:'#378ADD',txt:'Hengitys hidastuu'},{dot:'#378ADD',txt:'Liikkeet tuntuvat raskaammilta'},{dot:'#378ADD',txt:'Ajatukset hidastuvat'},{dot:'#85B7EB',txt:'Jalat ja kädet painavat'}],
+  las:{id:'las',title:'Unelias',sub:'Hermosto alkaa hidastua. Keho pyytää lepoa tai aktivointia.',handle:'#7F77DD',bc:'b-las',zclass:'zone-las',
+    oireet:[{dot:'#7F77DD',txt:'Sydän lyö hitaammin'},{dot:'#7F77DD',txt:'Hengitys hidastuu'},{dot:'#7F77DD',txt:'Liikkeet tuntuvat raskaammilta'},{dot:'#7F77DD',txt:'Ajatukset hidastuvat'},{dot:'#AFA9EC',txt:'Jalat ja kädet painavat'}],
     pts:{sydan:{op:0},hengitys:{op:0.4,slow:true},niska:{op:0},vatsa:{op:0},kadet:{op:0.3},paa:{op:0},rento:{op:0.3},jalat:{op:0.6,slow:true}},hkey:'las'},
-  ali:{id:'ali',title:'Alivireystila',sub:'Jähmety — vagushermon selän puoleinen haara aktivoitunut. Lamaannus.',handle:'#3C3489',bc:'b-ali',zclass:'zone-ali',
-    oireet:[{dot:'#7F77DD',txt:'Sydän lyö hitaasti, keho painava'},{dot:'#7F77DD',txt:'Hengitys pinnallista ja hidasta'},{dot:'#7F77DD',txt:'Dissosiaatio tai mieli poissaoleva'},{dot:'#7F77DD',txt:'Häpeä, toivottomuus tai tyhjyys'},{dot:'#7F77DD',txt:'Autopilotilla eteneminen'}],
+  ali:{id:'ali',title:'Uupunut',sub:'Jähmety — vagushermon selän puoleinen haara aktivoitunut. Lamaannus.',handle:'#185FA5',bc:'b-ali',zclass:'zone-ali',
+    oireet:[{dot:'#378ADD',txt:'Sydän lyö hitaasti, keho painava'},{dot:'#378ADD',txt:'Hengitys pinnallista ja hidasta'},{dot:'#378ADD',txt:'Dissosiaatio tai mieli poissaoleva'},{dot:'#378ADD',txt:'Häpeä, toivottomuus tai tyhjyys'},{dot:'#378ADD',txt:'Autopilotilla eteneminen'}],
     pts:{sydan:{op:0},hengitys:{op:0.5,slow:true},niska:{op:0},vatsa:{op:0},kadet:{op:0.5},paa:{op:0.4,slow:true},rento:{op:0},jalat:{op:1,slow:true}},hkey:'ali'}
 };
 
@@ -1610,22 +1619,39 @@ function toggleOire(t,z){
 }
 
 function paivitaEhdotus(){
+  const pm={yli:10,kohonnut:27,ok:50,las:72,ali:90};
+  const kaikki=[...OIREET.keho,...OIREET.mieli,...OIREET.kayt];
   const scores={yli:0,kohonnut:0,ok:0,las:0,ali:0};
+
+  // Laske pisteet vyöhykkeittäin
   valiturOireet.forEach(t=>{
-    const o=[...OIREET.keho,...OIREET.mieli,...OIREET.kayt].find(x=>x.t===t);
+    const o=kaikki.find(x=>x.t===t);
     if(o)scores[o.z]=(scores[o.z]||0)+1;
   });
-  const max=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
-  if(max&&max[1]>0){
-    const zid=max[0]||'ok';
-    aktiivZone=zid;
-    const z=ZD[zid];
-    document.getElementById('ehdotus-wrap').innerHTML=`<span class="ehdotus-badge ${z.bc}">&#10024; Ehdotus: ${z.title}</span>`;
-    const pm={yli:10,kohonnut:27,ok:50,las:72,ali:90};
-    setJana(pm[zid]);
-  } else {
+
+  const yhteensa=valiturOireet.length;
+  if(yhteensa===0){
     document.getElementById('ehdotus-wrap').innerHTML='';
+    return;
   }
+
+  // Laske painotettu keskiarvo jana-arvoista
+  let summa=0;
+  valiturOireet.forEach(t=>{
+    const o=kaikki.find(x=>x.t===t);
+    if(o)summa+=pm[o.z];
+  });
+  const keskiarvo=Math.round(summa/yhteensa);
+
+  // Eniten pisteitä saanut vyöhyke ehdotukseen
+  const max=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
+  const zid=max[0]||'ok';
+  aktiivZone=zid;
+  const z=ZD[zid];
+  document.getElementById('ehdotus-wrap').innerHTML=`<span class="ehdotus-badge ${z.bc}">&#10024; Ehdotus: ${z.title}</span>`;
+
+  // Jana liikkuu painotetun keskiarvon mukaan
+  setJana(keskiarvo);
 }
 
 function setJana(pct){
@@ -1836,7 +1862,7 @@ function renderViikko(){
     const pvm=d.toLocaleDateString('fi-FI',{weekday:'short'});
     const pm=merkinnat.filter(m=>new Date(m.aika).toDateString()===ds);
     const avg=pm.length?Math.round(pm.reduce((s,m)=>s+m.janaArvo,0)/pm.length):null;
-    const color=avg===null?'#eee':avg<20?'#F4C0B8':avg<35?'#FAC775':avg<65?'#C0DD97':avg<80?'#B5D4F4':'#AFA9EC';
+    const color=avg===null?'#eee':avg<20?'#F4C0B8':avg<35?'#FAC775':avg<65?'#C0DD97':avg<80?'#AFA9EC':'#B5D4F4';
     const h=avg===null?4:Math.max(10,Math.round(avg));
     bars.push(`<div class="vbar-wrap"><div class="vbar" style="height:${h}px;background:${color}"></div><span class="vbar-lbl">${pvm}</span></div>`);
   }
@@ -1980,20 +2006,12 @@ function tallennaHarjoitusSeuranta() {
   // Laske suunta kohti tasapainoista vireystilaa (35-65 = ok-vyöhyke)
   const ennenEtaisyys = Math.abs(ennen - 50);
   const jalkeenEtaisyys = Math.abs(jalkeen - 50);
-  let palaute = '';
-  if (jalkeenEtaisyys < ennenEtaisyys - 3) {
-    palaute = '✓ Harjoitus auttoi — liikuit kohti tasapainoista vireystilaa.';
-  } else if (jalkeenEtaisyys > ennenEtaisyys + 3) {
-    palaute = 'Vireystila siirtyi kauemmas tasapainoisesta vireystilasta. Voi olla normaalia — seuraa pidemmällä aikavälillä.';
-  } else {
-    palaute = 'Vireystila pysyi samankaltaisena. Vaikutus voi näkyä myöhemmin tai tarvitset eri harjoitusta.';
-  }
 
-  document.getElementById('hs-vaikutus-palaute').textContent = palaute;
+  document.getElementById('hs-vaikutus-palaute').textContent = '';
   document.getElementById('hs-ennen-vaihe').style.display = 'none';
   document.getElementById('hs-jalkeen-vaihe').style.display = 'none';
   document.getElementById('hs-valmis-vaihe').style.display = 'block';
-  document.getElementById('harj-seuranta-tila').textContent = 'Tallennettu!';
+  document.getElementById('harj-seuranta-tila').textContent = '✓ Tallennettu omapolkuun!';
 }
 
 function peruutaHarjoitusSeuranta() {
@@ -2012,7 +2030,7 @@ function uusiHarjoitusSeuranta() {
 
 // Värikartta vireystilan mukaan
 function zoneVari(zid) {
-  return { yli:'#E24B4A', kohonnut:'#EF9F27', ok:'#639922', las:'#378ADD', ali:'#7F77DD' }[zid] || '#aaa';
+  return { yli:'#E24B4A', kohonnut:'#EF9F27', ok:'#639922', las:'#7F77DD', ali:'#378ADD' }[zid] || '#aaa';
 }
 function zoneTaustaVari(zid) {
   return { yli:'#FDE8EE', kohonnut:'#FDF3E3', ok:'#E8F5E9', las:'#E3EEF9', ali:'#EEEDFE' }[zid] || '#f5f5f5';
@@ -2108,7 +2126,7 @@ function renderPolkuAikajana() {
       const zid = t.data.zone || getZone(t.data.janaArvo || 50);
       const vari = zoneVari(zid);
       const tausta = zoneTaustaVari(zid);
-      const zdNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Tasapainoinen', las:'Laskenut', ali:'Alivireystila' }[zid] || zid;
+      const zdNimi = { yli:'Levoton', kohonnut:'Pirteä', ok:'Rauhallinen', las:'Unelias', ali:'Uupunut' }[zid] || zid;
       const oireet = t.data.oireet || [];
       const nota = t.data.nota || '';
       const avausId = 'teko-' + idx;
@@ -2132,8 +2150,8 @@ function renderPolkuAikajana() {
       </div>`;
 
     } else if (t.tyyppi === 'harjoite') {
-      const ennenNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Tasapainoinen', las:'Laskenut', ali:'Alivireystila' }[getZone(t.data.ennen||50)] || '';
-      const jalkeenNimi = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Tasapainoinen', las:'Laskenut', ali:'Alivireystila' }[getZone(t.data.jalkeen||50)] || '';
+      const ennenNimi = { yli:'Levoton', kohonnut:'Pirteä', ok:'Rauhallinen', las:'Unelias', ali:'Uupunut' }[getZone(t.data.ennen||50)] || '';
+      const jalkeenNimi = { yli:'Levoton', kohonnut:'Pirteä', ok:'Rauhallinen', las:'Unelias', ali:'Uupunut' }[getZone(t.data.jalkeen||50)] || '';
       const ennenEt = Math.abs((t.data.ennen||50)-50);
       const jalkeenEt = Math.abs((t.data.jalkeen||50)-50);
       const diff = ennenEt - jalkeenEt;
@@ -2252,8 +2270,8 @@ function laskeReflektio(merkinnat, harjoitukset, aanitteet) {
   const zdLaskuri = { yli:0, kohonnut:0, ok:0, las:0, ali:0 };
   tVk.forEach(m => { const z = m.zone || getZone(m.janaArvo||50); zdLaskuri[z] = (zdLaskuri[z]||0) + 1; });
   const yleisinZone = Object.entries(zdLaskuri).sort((a,b)=>b[1]-a[1])[0][0];
-  const zdNimet = { yli:'Ylivirittynyt', kohonnut:'Kohonnut', ok:'Tasapainoinen', las:'Laskenut', ali:'Alivireystila' };
-  const zdVarit = { yli:'#E24B4A', kohonnut:'#EF9F27', ok:'#639922', las:'#378ADD', ali:'#7F77DD' };
+  const zdNimet = { yli:'Levoton', kohonnut:'Pirteä', ok:'Rauhallinen', las:'Unelias', ali:'Uupunut' };
+  const zdVarit = { yli:'#E24B4A', kohonnut:'#EF9F27', ok:'#639922', las:'#7F77DD', ali:'#378ADD' };
   const zdTaustat = { yli:'#FDE8EE', kohonnut:'#FDF3E3', ok:'#EAF3DE', las:'#E3EEF9', ali:'#EEEDFE' };
 
   // Vertailu edelliseen viikkoon
@@ -2366,30 +2384,36 @@ function piirraKehityskaavio(merkinnat) {
   const pisteet = data.map((m, i) => {
     const x = padL + (i / (data.length - 1)) * plotW;
     const arvo = zoneArvo(m);
-    const y = padT + ((arvo - 1) / 4) * plotH;
+    // Piste vyöhykkeen keskelle: (arvo-1) segmentin yläreuna + puoli segmenttiä
+    const y = padT + ((arvo - 1) / 5) * plotH + (plotH / 5) * 0.5;
     return { x, y, m, arvo };
   });
 
   function pVari(arvo) {
     if (arvo === 3) return '#639922';
-    if (arvo === 2 || arvo === 4) return '#EF9F27';
+    if (arvo === 2) return '#EF9F27';
+    if (arvo === 4) return '#7F77DD';
     if (arvo === 1) return '#E24B4A';
-    if (arvo === 5) return '#7F77DD';
+    if (arvo === 5) return '#378ADD';
     return '#EF9F27';
   }
 
-  const segH = plotH / 4;
+  const segH = plotH / 5;
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">`;
-  svg += `<rect x="${padL}" y="${padT + segH*0}" width="${plotW}" height="${segH}" fill="#FDE8EE" opacity="0.5" rx="2"/>`;
-  svg += `<rect x="${padL}" y="${padT + segH*1}" width="${plotW}" height="${segH}" fill="#FDF3E3" opacity="0.5"/>`;
-  svg += `<rect x="${padL}" y="${padT + segH*1.5}" width="${plotW}" height="${segH*1}" fill="#EAF3DE" opacity="0.6"/>`;
-  svg += `<rect x="${padL}" y="${padT + segH*2}" width="${plotW}" height="${segH}" fill="#E3EEF9" opacity="0.5"/>`;
-  svg += `<rect x="${padL}" y="${padT + segH*3}" width="${plotW}" height="${segH}" fill="#EEEDFE" opacity="0.5" rx="2"/>`;
-  svg += `<text x="${padL-4}" y="${padT + segH*0 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Yli</text>`;
-  svg += `<text x="${padL-4}" y="${padT + segH*1 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Koh.</text>`;
-  svg += `<text x="${padL-4}" y="${padT + segH*2 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Opt.</text>`;
-  svg += `<text x="${padL-4}" y="${padT + segH*3 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Las.</text>`;
-  svg += `<text x="${padL-4}" y="${padT + segH*4 + 4}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Ali</text>`;
+  // Pystysuuntainen liukuväri: Levoton (ylin) → Uupunut (alin)
+  svg += `<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#FDE8EE"/>
+    <stop offset="25%"  stop-color="#FDF3E3"/>
+    <stop offset="50%"  stop-color="#EAF3DE"/>
+    <stop offset="75%"  stop-color="#EEEDFE"/>
+    <stop offset="100%" stop-color="#E3EEF9"/>
+  </linearGradient></defs>`;
+  svg += `<rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH}" fill="url(#bgGrad)" opacity="0.7" rx="2"/>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*0.5 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Lev.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*1.5 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Pirt.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*2.5 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Rauhal.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*3.5 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Unel.</text>`;
+  svg += `<text x="${padL-4}" y="${padT + segH*4.5 + 3}" font-size="8" fill="#aaa" text-anchor="end" font-family="DM Sans,sans-serif">Uupu.</text>`;
 
   if (pisteet.length > 1) {
     let path = `M ${pisteet[0].x} ${pisteet[0].y}`;
